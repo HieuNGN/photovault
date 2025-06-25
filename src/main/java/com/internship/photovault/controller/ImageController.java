@@ -52,9 +52,16 @@ public class ImageController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + imageResource.metadata().getFileName() + "\"")
                 .body(imageResource.resource());
     }
+
     @GetMapping
     public ResponseEntity<List<Image>> getAllImages() {
         List<Image> images = imageService.listAllImages();
         return ResponseEntity.ok(images);
+    }
+
+    @PatchMapping("/{id}/favorite")
+    public ResponseEntity<Image> toggleFavorite(@PathVariable Long id) {
+        Image updatedImage = imageService.toggleFavoriteStatus(id);
+        return ResponseEntity.ok(updatedImage);
     }
 }
