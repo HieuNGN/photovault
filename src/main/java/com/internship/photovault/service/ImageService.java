@@ -116,13 +116,39 @@ public class ImageService {
 
     public List<Image> listAllImages(Boolean isArchived) {
         Sort sort = Sort.by(Sort.Direction.DESC, "uploadedAt");
+        boolean inTrash = false; // Default to not showing trashed items
 
         if (isArchived == null) {
-            // If the parameter is not provided, return everything
-            return imageRepository.findAll(sort);
+            // This case now needs to be smarter
+            // For now, let's assume if archived is null, we show non-archived, non-trashed
+            // A more advanced implementation could handle more states
+            return imageRepository.findByIsArchivedAndIsInTrash(false, inTrash, sort);
         } else {
-            // If the parameter is provided, use our new repository method
-            return imageRepository.findByIsArchived(isArchived, sort);
+            return imageRepository.findByIsArchivedAndIsInTrash(isArchived, inTrash, sort);
         }
     }
+
+    public void moveToTrash(Long id) {
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ImageNotFoundException("Image not found with ID: " + id));
+        image.setInTrash(true);
+        image.setDeletedAt(LocalDateTime.now());
+        imageRepository.save(image);
+    }
+
+    public void restoreFromTrash(Long id) {
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ImageNotFoundException("No Image found with ID: " + id + " in Trash"));
+        image.setInTrash(false);
+        image.setDeletedAt(null);
+        imageRepository.save(image);
+    }
+
+    public List<Image> ListAllImagesInTrash() {
+        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "deletedAt"))
+                .stream()
+                .filter(Image::isInTrash)
+                .toList();
+    }
+
 }

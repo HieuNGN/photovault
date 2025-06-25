@@ -27,10 +27,13 @@ public class Image {
 
     @Column(nullable = false)
     private LocalDateTime uploadedAt;
+    private LocalDateTime deletedAt;
 
     private boolean isFavorite = false;
 
     private boolean isArchived = false;
 
     private boolean isDeleted = false;
+
+    private boolean isInTrash = false;
 }
