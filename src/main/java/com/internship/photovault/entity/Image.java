@@ -29,4 +29,8 @@ public class Image {
     private LocalDateTime uploadedAt;
 
     private boolean isFavorite = false;
+
+    private boolean isArchived = false;
+
+    private boolean isDeleted = false;
 }

@@ -13,7 +13,7 @@ public class HealthCheckController {
    @GetMapping("/api/v1/info")
    public String getInfo() {
        return "This is the API for the Photovault application";
-   } 
+   }
 }
 
 

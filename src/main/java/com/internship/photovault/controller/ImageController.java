@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @RestController
@@ -54,14 +55,20 @@ public class ImageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Image>> getAllImages() {
-        List<Image> images = imageService.listAllImages();
+    public ResponseEntity<List<Image>> getAllImages(@RequestParam(required = false) Boolean archived) {
+        List<Image> images = imageService.listAllImages(archived);
         return ResponseEntity.ok(images);
     }
 
     @PatchMapping("/{id}/favorite")
     public ResponseEntity<Image> toggleFavorite(@PathVariable Long id) {
         Image updatedImage = imageService.toggleFavoriteStatus(id);
+        return ResponseEntity.ok(updatedImage);
+    }
+
+    @PatchMapping("/{id}/archive")
+    public ResponseEntity<Image> toggleArchive(@PathVariable Long id) {
+        Image updatedImage = imageService.toggleArchiveStatus(id);
         return ResponseEntity.ok(updatedImage);
     }
 }

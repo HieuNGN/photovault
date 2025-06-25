@@ -105,4 +105,24 @@ public class ImageService {
         // 3. Save the updated record back to the database
         return imageRepository.save(image);
     }
+
+    public Image toggleArchiveStatus(Long id) {
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ImageNotFoundException("Image not found with ID: " + id));
+
+        image.setArchived(!image.isArchived());
+        return imageRepository.save(image);
+    }
+
+    public List<Image> listAllImages(Boolean isArchived) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "uploadedAt");
+
+        if (isArchived == null) {
+            // If the parameter is not provided, return everything
+            return imageRepository.findAll(sort);
+        } else {
+            // If the parameter is provided, use our new repository method
+            return imageRepository.findByIsArchived(isArchived, sort);
+        }
+    }
 }
