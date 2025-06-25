@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.List;
 
@@ -118,14 +119,10 @@ public class ImageService {
         Sort sort = Sort.by(Sort.Direction.DESC, "uploadedAt");
         boolean inTrash = false; // Default to not showing trashed items
 
-        if (isArchived == null) {
-            // This case now needs to be smarter
-            // For now, let's assume if archived is null, we show non-archived, non-trashed
-            // A more advanced implementation could handle more states
-            return imageRepository.findByIsArchivedAndIsInTrash(false, inTrash, sort);
-        } else {
-            return imageRepository.findByIsArchivedAndIsInTrash(isArchived, inTrash, sort);
-        }
+        // This case now needs to be smarter
+        // For now, let's assume if archived is null, we show non-archived, non-trashed
+        // A more advanced implementation could handle more states
+        return imageRepository.findByIsArchivedAndIsInTrash(Objects.requireNonNullElse(isArchived, false), inTrash, sort);
     }
 
     public void moveToTrash(Long id) {
@@ -139,6 +136,11 @@ public class ImageService {
     public void restoreFromTrash(Long id) {
         Image image = imageRepository.findById(id)
                 .orElseThrow(() -> new ImageNotFoundException("No Image found with ID: " + id + " in Trash"));
+
+        if (!image.isInTrash()) {
+            throw new IllegalStateException("Image is not in Trash");
+        }
+
         image.setInTrash(false);
         image.setDeletedAt(null);
         imageRepository.save(image);

@@ -33,7 +33,7 @@ public class Image {
 
     private boolean isArchived = false;
 
-    private boolean isDeleted = false;
+//    private boolean isDeleted = false;
 
     private boolean isInTrash = false;
 }
