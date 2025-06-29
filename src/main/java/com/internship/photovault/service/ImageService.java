@@ -66,7 +66,7 @@ public class ImageService {
         if (originalFileName != null && originalFileName.contains(".")) {
             fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
         }
-        String storedFileName = UUID.randomUUID().toString() + fileExtension;
+        String storedFileName = UUID.randomUUID() + fileExtension;
         Path targetLocation = this.storageLocation.resolve(storedFileName);
 
         try {
@@ -92,6 +92,13 @@ public class ImageService {
     public List<Image> listAllImages() {
         // Return all images, sorted by upload date in descending order (newest first)
         return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "uploadedAt"));
+    }
+
+    public List<Image> ListAllImagesInTrash() {
+        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "deletedAt"))
+                .stream()
+                .filter(Image::isInTrash)
+                .toList();
     }
     public record ImageResource(Resource resource, Image metadata) {}
 
@@ -146,11 +153,6 @@ public class ImageService {
         imageRepository.save(image);
     }
 
-    public List<Image> ListAllImagesInTrash() {
-        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "deletedAt"))
-                .stream()
-                .filter(Image::isInTrash)
-                .toList();
-    }
+
 
 }
