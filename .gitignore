@@ -6,6 +6,7 @@ target/
 
 #Environment Files
 .env
+application.properties
 
 ### STS ###
 .apt_generated
