@@ -1,39 +1,38 @@
 package com.internship.photovault.service;
 
 import com.internship.photovault.entity.Image;
+import com.internship.photovault.exception.ImageNotFoundException;
+import com.internship.photovault.exception.InvalidFileTypeException;
 import com.internship.photovault.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import com.internship.photovault.exception.ImageNotFoundException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import java.net.MalformedURLException;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-
-
-@Service // Marks this as a Spring service bean
+@Service
 public class ImageService {
 
     private final Path storageLocation;
     private final ImageRepository imageRepository;
 
-    // Constructor Injection: Spring automatically provides the dependencies
-    public ImageService(@Value("${file.storage.location}") String storageLocationPath, ImageRepository imageRepository) {
+    public ImageService(@Value("${photovault.storage.location:./uploads}") String storageLocationPath,
+                        ImageRepository imageRepository) {
         this.storageLocation = Paths.get(storageLocationPath).toAbsolutePath().normalize();
         this.imageRepository = imageRepository;
 
-        // Create the storage directory if it does not exist
         try {
             Files.createDirectories(this.storageLocation);
         } catch (IOException e) {
@@ -41,118 +40,116 @@ public class ImageService {
         }
     }
 
-    public ImageResource loadImageAsResource(Long id) {
-        try {
-            Image image = imageRepository.findById(id)
-                    .orElseThrow(() -> new ImageNotFoundException("Image not found with ID: " + id));
+    public Image saveImage(MultipartFile file) throws IOException {
+        // Validate file type
+        if (!isValidImageType(file.getContentType())) {
+            throw new InvalidFileTypeException("Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.");
+        }
 
-            Path filePath = this.storageLocation.resolve(image.getStoredFileName()).normalize();
+        // Generate unique filename
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = "";
+        if (originalFileName != null && originalFileName.contains(".")) {
+            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        }
+        String storedFilename = UUID.randomUUID() + fileExtension;
+
+        // Store the file
+        Path targetLocation = this.storageLocation.resolve(storedFilename);
+        Files.copy(file.getInputStream(), targetLocation);
+
+        // Create and save image entity
+        Image image = new Image();
+        image.setOriginalFilename(originalFileName);
+        image.setFilename(originalFileName);
+        image.setStoredFilename(storedFilename);
+        image.setFilePath(targetLocation.toString());
+        image.setFileSize(file.getSize());
+        image.setContentType(file.getContentType());
+        image.setUploadDate(LocalDateTime.now());
+
+        return imageRepository.save(image);
+    }
+
+    public Page<Image> getAllImages(Pageable pageable) {
+        return imageRepository.findAll(pageable);
+    }
+
+//    public List<Image> getAllImages() {
+//        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "uploadDate"));
+//    }
+
+    public Image getImageById(Long id) {
+        return imageRepository.findById(id)
+                .orElseThrow(() -> new ImageNotFoundException("Image not found with id: " + id));
+    }
+
+    public Resource loadImageAsResource(String filename) {
+        try {
+            Path filePath = this.storageLocation.resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists() && resource.isReadable()) {
-                return new ImageResource(resource, image); // Return both the resource and the metadata
+                return resource;
             } else {
-                throw new RuntimeException("Could not read the file for image ID: " + id);
+                throw new RuntimeException("Could not read the file: " + filename);
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 
-    public Image storeImage(MultipartFile file) {
-        // 1. Generate a unique filename to prevent collisions and enhance security
-        String originalFileName = file.getOriginalFilename();
-        String fileExtension = "";
-        if (originalFileName != null && originalFileName.contains(".")) {
-            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        }
-        String storedFileName = UUID.randomUUID() + fileExtension;
-        Path targetLocation = this.storageLocation.resolve(storedFileName);
-
-        try {
-            // 2. Save the file to the filesystem
-            Files.copy(file.getInputStream(), targetLocation);
-
-            // 3. Create the Image entity object with the file's metadata
-            Image image = new Image();
-            image.setFileName(originalFileName);
-            image.setStoredFileName(storedFileName);
-            image.setContentType(file.getContentType());
-            image.setSize(file.getSize());
-            image.setUploadedAt(LocalDateTime.now());
-
-            // 4. Save the metadata to the database and return the saved entity
-            return imageRepository.save(image);
-
-        } catch (IOException e) {
-            // In a real application, you'd want more specific exception handling
-            throw new RuntimeException("Failed to store file " + originalFileName, e);
-        }
-    }
-    public List<Image> listAllImages() {
-        // Return all images, sorted by upload date in descending order (newest first)
-        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "uploadedAt"));
+    public Image toggleFavorite(Long id) {
+        Image image = getImageById(id);
+        image.setIsFavorite(!image.getIsFavorite());
+        return imageRepository.save(image);
     }
 
-    public List<Image> ListAllImagesInTrash() {
-        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "deletedAt"))
-                .stream()
-                .filter(Image::isInTrash)
+    public List<Image> getFavorites() {
+        return imageRepository.findAll().stream()
+                .filter(image -> image.getIsFavorite() && !image.getIsDeleted())
                 .toList();
     }
-    public record ImageResource(Resource resource, Image metadata) {}
 
-    public Image toggleFavoriteStatus(Long id) {
-        // 1. Find the existing image record
-        Image image = imageRepository.findById(id)
-                .orElseThrow(() -> new ImageNotFoundException("Image not found with ID: " + id));
-
-        // 2. Toggle the boolean status
-        image.setFavorite(!image.isFavorite());
-
-        // 3. Save the updated record back to the database
-        return imageRepository.save(image);
+    public List<Image> searchImages(String query) {
+        return imageRepository.findAll().stream()
+                .filter(image -> !image.getIsDeleted() &&
+                        image.getOriginalFilename().toLowerCase().contains(query.toLowerCase()))
+                .toList();
     }
 
-    public Image toggleArchiveStatus(Long id) {
-        Image image = imageRepository.findById(id)
-                .orElseThrow(() -> new ImageNotFoundException("Image not found with ID: " + id));
+    public Map<String, Object> getImageStats() {
+        long totalImages = imageRepository.count();
+        long favoriteCount = getFavorites().size();
+        long archivedCount = imageRepository.findAll().stream()
+                .filter(image -> image.getIsArchived() && !image.getIsDeleted())
+                .count();
 
-        image.setArchived(!image.isArchived());
-        return imageRepository.save(image);
-    }
-
-    public List<Image> listAllImages(Boolean isArchived) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "uploadedAt");
-        boolean inTrash = false; // Default to not showing trashed items
-
-        // This case now needs to be smarter
-        // For now, let's assume if archived is null, we show non-archived, non-trashed
-        // A more advanced implementation could handle more states
-        return imageRepository.findByIsArchivedAndIsInTrash(Objects.requireNonNullElse(isArchived, false), inTrash, sort);
+        return Map.of(
+                "totalImages", totalImages,
+                "favorites", favoriteCount,
+                "archived", archivedCount
+        );
     }
 
     public void moveToTrash(Long id) {
-        Image image = imageRepository.findById(id)
-                .orElseThrow(() -> new ImageNotFoundException("Image not found with ID: " + id));
-        image.setInTrash(true);
-        image.setDeletedAt(LocalDateTime.now());
+        Image image = getImageById(id);
+        image.setIsDeleted(true);
         imageRepository.save(image);
     }
 
-    public void restoreFromTrash(Long id) {
-        Image image = imageRepository.findById(id)
-                .orElseThrow(() -> new ImageNotFoundException("No Image found with ID: " + id + " in Trash"));
-
-        if (!image.isInTrash()) {
-            throw new IllegalStateException("Image is not in Trash");
-        }
-
-        image.setInTrash(false);
-        image.setDeletedAt(null);
-        imageRepository.save(image);
+    public Image toggleArchive(Long id) {
+        Image image = getImageById(id);
+        image.setIsArchived(!image.getIsArchived());
+        return imageRepository.save(image);
     }
 
-
-
+    private boolean isValidImageType(String contentType) {
+        return contentType != null && (
+                contentType.equals("image/jpeg") ||
+                        contentType.equals("image/png") ||
+                        contentType.equals("image/gif") ||
+                        contentType.equals("image/webp")
+        );
+    }
 }
