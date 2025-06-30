@@ -6,7 +6,7 @@ target/
 
 #Environment Files
 .env
-application.properties
+src/main/resources/application.properties
 
 #Codebase Summary
 repomix-output-HieuNGN-photovault (1).xml
