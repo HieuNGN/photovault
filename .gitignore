@@ -8,6 +8,9 @@ target/
 .env
 application.properties
 
+#Codebase Summary
+repomix-output-HieuNGN-photovault (1).xml
+
 ### STS ###
 .apt_generated
 .classpath
