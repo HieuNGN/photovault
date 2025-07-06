@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS images (
     id BIGSERIAL PRIMARY KEY,
     filename VARCHAR(255) NOT NULL,
+    stored_filename VARCHAR(255) NOT NULL,
     original_filename VARCHAR(255) NOT NULL,
     file_path VARCHAR(500) NOT NULL,
     file_size BIGINT NOT NULL,
@@ -12,7 +13,7 @@ CREATE TABLE IF NOT EXISTS images (
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+);
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_images_filename ON images(filename);

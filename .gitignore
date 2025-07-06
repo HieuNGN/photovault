@@ -4,12 +4,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-#Environment Files
+#Environment/Config Files
 .env
 src/main/resources/application.properties
 
 #Codebase Summary
-repomix-output-HieuNGN-photovault (1).xml
+repomix-output-HieuNGN-photovault.xml
 
 ### STS ###
 .apt_generated

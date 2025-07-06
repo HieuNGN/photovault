@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/images")
+@RequestMapping("/images")
 @CrossOrigin(origins = "*")
 @Validated
 public class ImageController {

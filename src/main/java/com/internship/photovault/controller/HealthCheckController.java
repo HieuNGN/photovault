@@ -6,14 +6,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/health")
 public class HealthCheckController {
-    @GetMapping
-        public String checkHealth() {
-            return "Houston, we are live! API is working";
-        }
-   @GetMapping("/api/v1/info")
-   public String getInfo() {
-       return "This is the API for the Photovault application";
-   }
+
+    @GetMapping("/health")
+    public String checkHealth() {
+        return "Houston, we are live! API is working";
+    }
+
+    @GetMapping("/info")  // Remove the duplicate /api/v1 prefix
+    public String getInfo() {
+        return "This is the API for the Photovault application";
+    }
 }
 
 

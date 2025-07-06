@@ -1,5 +1,6 @@
 package com.internship.photovault.service;
 
+import com.internship.photovault.config.FileValidationConfig;
 import com.internship.photovault.entity.Image;
 import com.internship.photovault.exception.ImageNotFoundException;
 import com.internship.photovault.exception.InvalidFileTypeException;
@@ -27,11 +28,14 @@ public class ImageService {
 
     private final Path storageLocation;
     private final ImageRepository imageRepository;
+    private final FileValidationConfig fileValidationConfig;
 
     public ImageService(@Value("${photovault.storage.location:./uploads}") String storageLocationPath,
-                        ImageRepository imageRepository) {
+                        ImageRepository imageRepository,
+                        FileValidationConfig fileValidationConfig, FileValidationConfig fileValidationConfig1) {
         this.storageLocation = Paths.get(storageLocationPath).toAbsolutePath().normalize();
         this.imageRepository = imageRepository;
+        this.fileValidationConfig = fileValidationConfig;
 
         try {
             Files.createDirectories(this.storageLocation);
@@ -39,6 +43,10 @@ public class ImageService {
             throw new RuntimeException("Could not create the storage directory.", e);
         }
     }
+
+//    private boolean isValidImageType(String contentType) {
+//        return fileValidationConfig.isValidImageType(contentType);
+//    }
 
     public Image saveImage(MultipartFile file) throws IOException {
         // Validate file type
