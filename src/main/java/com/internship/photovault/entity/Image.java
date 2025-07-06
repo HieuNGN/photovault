@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @Entity
 @Table(name = "images")
@@ -67,29 +69,4 @@ public class Image {
         this.uploadDate = LocalDateTime.now();
     }
 
-    public void setId(Long id) { this.id = id; }
-
-    public void setFilename(String filename) { this.filename = filename; }
-
-    public void setStoredFilename(String storedFilename) { this.storedFilename = storedFilename; }
-
-    public void setOriginalFilename(String originalFilename) { this.originalFilename = originalFilename; }
-
-    public void setFilePath(String filePath) { this.filePath = filePath; }
-
-    public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
-
-    public void setContentType(String contentType) { this.contentType = contentType; }
-
-    public void setUploadDate(LocalDateTime uploadDate) { this.uploadDate = uploadDate; }
-
-    public void setIsFavorite(Boolean isFavorite) { this.isFavorite = isFavorite; }
-
-    public void setIsArchived(Boolean isArchived) { this.isArchived = isArchived; }
-
-    public void setIsDeleted(Boolean isDeleted) { this.isDeleted = isDeleted; }
-
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }
