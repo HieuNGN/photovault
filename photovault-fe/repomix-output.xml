@@ -1,0 +1,849 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+public/
+  index.html
+  manifest.json
+  robots.txt
+src/
+  components/
+    ImageUploads/
+      ImageUploads.tsx
+  services/
+    api.ts
+  App.css
+  App.test.tsx
+  App.tsx
+  index.css
+  index.tsx
+  logo.svg
+  react-app-env.d.ts
+  reportWebVitals.ts
+  setupTests.ts
+.gitignore
+package.json
+photovault-fe.iml
+README.md
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="public/index.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
+</file>
+
+<file path="public/manifest.json">
+{
+  "short_name": "React App",
+  "name": "Create React App Sample",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
+</file>
+
+<file path="public/robots.txt">
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+</file>
+
+<file path="src/components/ImageUploads/ImageUploads.tsx">
+import React, { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { Box, Typography, CircularProgress, Alert } from '@mui/material';
+import { CloudUpload } from '@mui/icons-material';
+import { imageApi } from '../../services/api';
+
+interface ImageUploadProps {
+    onUploadSuccess: () => void;
+}
+
+const ImageUpload: React.FC<ImageUploadProps> = ({ onUploadSuccess }) => {
+    const [uploading, setUploading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+
+    const onDrop = useCallback(async (acceptedFiles: File[]) => {
+        const file = acceptedFiles[0];
+        if (!file) return;
+
+        setUploading(true);
+        setError(null);
+        setSuccess(null);
+
+        try {
+            await imageApi.uploadImage(file);
+            setSuccess(`Successfully uploaded ${file.name}`);
+            onUploadSuccess();
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Upload failed');
+        } finally {
+            setUploading(false);
+        }
+    }, [onUploadSuccess]);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
+        },
+        maxSize: 10 * 3840 * 2160, // 10MB
+        multiple: false
+    });
+
+    return (
+        <Box sx={{ mb: 4 }}>
+            <Box
+                {...getRootProps()}
+                sx={{
+                    border: '2px dashed #ccc',
+                    borderRadius: 2,
+                    p: 4,
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    backgroundColor: isDragActive ? '#f5f5f5' : 'transparent',
+                    '&:hover': {
+                        backgroundColor: '#f9f9f9',
+                    },
+                }}
+            >
+                <input {...getInputProps()} />
+                {uploading ? (
+                    <CircularProgress />
+                ) : (
+                    <>
+                        <CloudUpload sx={{ fontSize: 48, color: '#666', mb: 2 }} />
+                        <Typography variant="h6" gutterBottom>
+                            {isDragActive ? 'Drop the image here' : 'Drag & drop an image here'}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            or click to select a file
+                        </Typography>
+                        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+                            Supports: JPEG, PNG, GIF, WebP (max 10MB)
+                        </Typography>
+                    </>
+                )}
+            </Box>
+
+            {error && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                    {error}
+                </Alert>
+            )}
+
+            {success && (
+                <Alert severity="success" sx={{ mt: 2 }}>
+                    {success}
+                </Alert>
+            )}
+        </Box>
+    );
+};
+
+export default ImageUpload;
+</file>
+
+<file path="src/services/api.ts">
+import axios from 'axios';
+
+const API_BASE_URL = 'http://localhost:8080/';
+
+const api = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+export interface Image {
+    id: number;
+    filename: string;
+    storedFilename: string;
+    originalFilename: string;
+    filePath: string;
+    fileSize: number;
+    contentType: string;
+    uploadDate: string;
+    isFavorite: boolean;
+    isArchived: boolean;
+    isDeleted: boolean;
+}
+
+export const imageApi = {
+    // Test connection
+    testConnection: () =>
+        api.get('/health'),
+
+    // Upload image
+    uploadImage: (file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return api.post('/images/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    },
+
+    // Get all images with pagination
+    getAllImages: (page = 0, size = 10) =>
+        api.get(`/images?page=${page}&size=${size}`),
+
+    // Get image by ID
+    getImageById: (id: number) =>
+        api.get(`/images/${id}`),
+
+    // Download image
+    downloadImage: (id: number) =>
+        api.get(`/images/${id}/download`, { responseType: 'blob' }),
+
+    // Toggle favorite
+    toggleFavorite: (id: number) =>
+        api.put(`/images/${id}/favorite`),
+
+    // Get favorites
+    getFavorites: () =>
+        api.get('/images/favorites'),
+
+    // Search images
+    searchImages: (query: string) =>
+        api.get(`/images/search?query=${query}`),
+
+    // Delete image (move to trash)
+    deleteImage: (id: number) =>
+        api.delete(`/images/${id}`),
+
+    // Get stats
+    getStats: () =>
+        api.get('/images/stats'),
+};
+
+export default api;
+</file>
+
+<file path="src/App.css">
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</file>
+
+<file path="src/App.test.tsx">
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders photovault title', () => {
+  render(<App />);
+  const titleElement = screen.getByText(/Photovault API Test in progress/i);
+  expect(titleElement).toBeInTheDocument();
+});
+</file>
+
+<file path="src/App.tsx">
+import React, { useState, useEffect } from 'react';
+import {
+  Container,
+  Typography,
+  Box,
+  Button,
+  Alert,
+  CircularProgress,
+  Paper,
+  Grid
+} from '@mui/material';
+import { CheckCircle, Error, Cloud } from '@mui/icons-material';
+import { imageApi } from './services/api';
+
+interface ConnectionStatus {
+  backend: 'loading' | 'success' | 'error';
+  message: string;
+}
+
+function App() {
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>({
+    backend: 'loading',
+    message: 'Testing connection...'
+  });
+  const [stats, setStats] = useState<any>(null);
+  const [images, setImages] = useState<any>(null);
+
+  // Test backend connection
+  const testBackendConnection = async () => {
+    try {
+      setConnectionStatus({ backend: 'loading', message: 'Testing backend connection...' });
+      const response = await imageApi.testConnection();
+      setConnectionStatus({
+        backend: 'success',
+        message: `Backend connected: ${response.data}`
+      });
+    } catch (error: any) {
+      setConnectionStatus({
+        backend: 'error',
+        message: `Backend connection failed: ${error.message}`
+      });
+    }
+  };
+
+  // Test stats endpoint
+  const testStatsEndpoint = async () => {
+    try {
+      const response = await imageApi.getStats();
+      setStats(response.data);
+    } catch (error: any) {
+      console.error('Stats endpoint failed:', error);
+    }
+  };
+
+  // Test images endpoint
+  const testImagesEndpoint = async () => {
+    try {
+      const response = await imageApi.getAllImages();
+      setImages(response.data);
+    } catch (error: any) {
+      console.error('Images endpoint failed:', error);
+    }
+  };
+
+  // Test file upload
+  const testFileUpload = async () => {
+    // Create a small test image file
+    const canvas = document.createElement('canvas');
+    canvas.width = 100;
+    canvas.height = 100;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#4CAF50';
+      ctx.fillRect(0, 0, 100, 100);
+      ctx.fillStyle = 'white';
+      ctx.font = '16px Arial';
+      ctx.fillText('TEST', 30, 55);
+    }
+
+    canvas.toBlob(async (blob) => {
+      if (blob) {
+        const testFile = new File([blob], 'test-image.png', { type: 'image/png' });
+        try {
+          const response = await imageApi.uploadImage(testFile);
+          alert(`Upload successful: ${JSON.stringify(response.data.message)}`);
+          // Refresh stats and images after upload
+          await testStatsEndpoint();
+          await testImagesEndpoint();
+        } catch (error: any) {
+          alert(`Upload failed: ${error.response?.data?.error || error.message}`);
+        }
+      }
+    }, 'image/png');
+  };
+
+  useEffect(() => {
+    testBackendConnection();
+    testStatsEndpoint();
+    testImagesEndpoint();
+  }, []);
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'loading': return <CircularProgress size={20} />;
+      case 'success': return <CheckCircle color="success" />;
+      case 'error': return <Error color="error" />;
+      default: return null;
+    }
+  };
+
+  return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom align="center">
+          📸 PhotoVault API Test
+        </Typography>
+
+        <Typography variant="subtitle1" align="center" color="textSecondary" sx={{ mb: 4 }}>
+          Testing connection between React frontend and Spring Boot backend
+        </Typography>
+
+        {/* Connection Status */}
+        <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+          <Box display="flex" alignItems="center" gap={2}>
+            {getStatusIcon(connectionStatus.backend)}
+            <Typography variant="h6">Backend Connection</Typography>
+          </Box>
+          <Alert
+              severity={connectionStatus.backend === 'success' ? 'success' :
+                  connectionStatus.backend === 'error' ? 'error' : 'info'}
+              sx={{ mt: 2 }}
+          >
+            {connectionStatus.message}
+          </Alert>
+        </Paper>
+
+        {/* API Endpoints Test */}
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                📊 Stats Endpoint
+              </Typography>
+              {stats ? (
+                  <Box>
+                    <Typography>Total Images: {stats.totalImages}</Typography>
+                    <Typography>Favorites: {stats.favorites}</Typography>
+                    <Typography>Archived: {stats.archived}</Typography>
+                  </Box>
+              ) : (
+                  <Typography color="textSecondary">Loading stats...</Typography>
+              )}
+              <Button
+                  variant="outlined"
+                  onClick={testStatsEndpoint}
+                  sx={{ mt: 2 }}
+              >
+                Refresh Stats
+              </Button>
+            </Paper>
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                🖼️ Images Endpoint
+              </Typography>
+              {images ? (
+                  <Box>
+                    <Typography>
+                      Found: {images.totalElements || images.length || 0} images
+                    </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                      {images.content ? 'Paginated response' : 'Simple array response'}
+                    </Typography>
+                  </Box>
+              ) : (
+                  <Typography color="textSecondary">Loading images...</Typography>
+              )}
+              <Button
+                  variant="outlined"
+                  onClick={testImagesEndpoint}
+                  sx={{ mt: 2 }}
+              >
+                Refresh Images
+              </Button>
+            </Paper>
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                ⬆️ Upload Test
+              </Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+                This will create and upload a small test image to verify the upload endpoint.
+              </Typography>
+              <Button
+                  variant="contained"
+                  onClick={testFileUpload}
+                  startIcon={<Cloud />}
+                  disabled={connectionStatus.backend !== 'success'}
+              >
+                Test Upload
+              </Button>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        {/* Retry Connection */}
+        <Box textAlign="center" sx={{ mt: 4 }}>
+          <Button
+              variant="outlined"
+              onClick={testBackendConnection}
+              disabled={connectionStatus.backend === 'loading'}
+          >
+            Retry Connection Test
+          </Button>
+        </Box>
+      </Container>
+  );
+}
+
+export default App;
+</file>
+
+<file path="src/index.css">
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+</file>
+
+<file path="src/index.tsx">
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+</file>
+
+<file path="src/logo.svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3"><g fill="#61DAFB"><path d="M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z"/><circle cx="420.9" cy="296.5" r="45.7"/><path d="M520.5 78.1z"/></g></svg>
+</file>
+
+<file path="src/react-app-env.d.ts">
+/// <reference types="react-scripts" />
+</file>
+
+<file path="src/reportWebVitals.ts">
+import { ReportHandler } from 'web-vitals';
+
+const reportWebVitals = (onPerfEntry?: ReportHandler) => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
+  }
+};
+
+export default reportWebVitals;
+</file>
+
+<file path="src/setupTests.ts">
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+</file>
+
+<file path="package.json">
+{
+  "name": "photovault-fe",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.126",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.10.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-dropzone": "^14.3.8",
+    "react-router-dom": "^7.6.3",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+</file>
+
+<file path="photovault-fe.iml">
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+</file>
+
+<file path="README.md">
+# Getting Started with Create React App
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src"
+  ]
+}
+</file>
+
+</files>

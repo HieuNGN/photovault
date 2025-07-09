@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="photovault_db@127.0.0.1" uuid="f28c068f-744f-4a9c-a49c-e142258b9916">
+    <data-source source="LOCAL" name="photovault_db@127.0.0.1" uuid="db0b7cc2-041d-4201-a63f-2cd52de40f07">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
