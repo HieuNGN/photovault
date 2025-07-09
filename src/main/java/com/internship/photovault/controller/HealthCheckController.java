@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/health")
+@RequestMapping("/health")
 public class HealthCheckController {
 
-    @GetMapping("/health")
+    @GetMapping // This creates GET /health
     public String checkHealth() {
         return "Houston, we are live! API is working";
     }

@@ -23,33 +23,28 @@ import java.util.Optional;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    // Find non-deleted images
+    // Add proper generics to all methods
     @Query("SELECT i FROM Image i WHERE i.isDeleted = false")
     Page<Image> findAllActive(Pageable pageable);
 
-    // Find favorites
     @Query("SELECT i FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false")
     List<Image> findFavorites();
 
-    // Find archived images
     @Query("SELECT i FROM Image i WHERE i.isArchived = true AND i.isDeleted = false")
     List<Image> findArchived();
 
-    // Find trash (soft deleted)
     @Query("SELECT i FROM Image i WHERE i.isDeleted = true")
     List<Image> findTrash();
 
-    // Find by filename
     Optional<Image> findByFilenameAndIsDeletedFalse(String filename);
 
-    // Search by original filename
     @Query("SELECT i FROM Image i WHERE i.originalFilename ILIKE %:searchTerm% AND i.isDeleted = false")
     List<Image> searchByOriginalFilename(@Param("searchTerm") String searchTerm);
 
-    // Count statistics
     @Query("SELECT COUNT(i) FROM Image i WHERE i.isDeleted = false")
     long countActiveImages();
 
     @Query("SELECT COUNT(i) FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false")
     long countFavorites();
 }
+

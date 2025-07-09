@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/images")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @Validated
 public class ImageController {
 
@@ -131,7 +131,7 @@ public class ImageController {
     public ResponseEntity<?> deleteImage(@PathVariable Long id) {
         try {
             imageService.moveToTrash(id);
-            return ResponseEntity.ok(Map.of("message", "Image moved to trash"));
+            return ResponseEntity.ok(Map.of("message", "Item moved to trash"));
         } catch (ImageNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
@@ -149,4 +149,39 @@ public class ImageController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/archived")
+    public ResponseEntity<List<Image>> getArchivedImages() {
+        List<Image> archivedImages = imageService.getArchivedImages();
+        return ResponseEntity.ok(archivedImages);
+    }
+
+//    adding the backend endpoints for the trash and restore functions
+    @GetMapping("/trash")
+    public ResponseEntity<List<Image>> getTrashedImages() {
+        List<Image> trashedImages = imageService.getTrashedImages();
+        return ResponseEntity.ok(trashedImages);
+    }
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<?> restoreImage(@PathVariable Long id) {
+        try {
+            Image image = imageService.restoreFromTrash(id);
+            return ResponseEntity.ok(Map.of(
+                    "message", "Item restored from trash",
+                    "image", image
+            ));
+        } catch (ImageNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping("/{id}/permanent")
+    public ResponseEntity<?> deletePermanently(@PathVariable Long id) {
+        try {
+            imageService.deletePermanently(id);
+            return ResponseEntity.ok(Map.of("message", "Item permanently deleted"));
+        } catch (ImageNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

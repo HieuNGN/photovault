@@ -11,6 +11,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class ImageService {
 
     public ImageService(@Value("${photovault.storage.location:./uploads}") String storageLocationPath,
                         ImageRepository imageRepository,
-                        FileValidationConfig fileValidationConfig, FileValidationConfig fileValidationConfig1) {
+                        FileValidationConfig fileValidationConfig) {
         this.storageLocation = Paths.get(storageLocationPath).toAbsolutePath().normalize();
         this.imageRepository = imageRepository;
         this.fileValidationConfig = fileValidationConfig;
@@ -43,12 +44,18 @@ public class ImageService {
             throw new RuntimeException("Could not create the storage directory.", e);
         }
     }
-
+    // Update the validation method to use injected config
 //    private boolean isValidImageType(String contentType) {
 //        return fileValidationConfig.isValidImageType(contentType);
 //    }
 
     public Image saveImage(MultipartFile file) throws IOException {
+        //file size validation
+        long maxFileSize = 10 * 1024 * 1024;
+        if (file.getSize() > maxFileSize) {
+            throw new MaxUploadSizeExceededException(maxFileSize);
+        }
+
         // Validate file type
         if (!isValidImageType(file.getContentType())) {
             throw new InvalidFileTypeException("Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.");
@@ -93,6 +100,10 @@ public class ImageService {
     }
 
     public Resource loadImageAsResource(String filename) {
+        if (filename == null || filename.trim().isEmpty()) {
+            throw new IllegalArgumentException("Filename cannot be null or empty");
+        }
+        
         try {
             Path filePath = this.storageLocation.resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
@@ -152,6 +163,13 @@ public class ImageService {
         return imageRepository.save(image);
     }
 
+    public List<Image> getArchivedImages() {
+        return imageRepository.findAll().stream()
+                .filter(image -> image.getIsArchived() && !image.getIsDeleted())
+                .sorted((a, b) -> b.getUpdatedAt().compareTo(a.getUpdatedAt()))
+                .toList();
+    }
+
     private boolean isValidImageType(String contentType) {
         return contentType != null && (
                 contentType.equals("image/jpeg") ||
@@ -159,5 +177,37 @@ public class ImageService {
                         contentType.equals("image/gif") ||
                         contentType.equals("image/webp")
         );
+    }
+
+    public List<Image> getTrashedImages() {
+        return imageRepository.findAll().stream()
+            .filter(Image::getIsDeleted)
+            .sorted((a, b) -> b.getUpdatedAt().compareTo(a.getUpdatedAt()))
+            .toList();
+    }
+
+    public Image restoreFromTrash(Long id) {
+        Image image = getImageById(id);
+        if (!image.getIsDeleted()) {
+            throw new IllegalStateException("Image is not in trash");
+        }
+        image.setIsDeleted(false);
+        return imageRepository.save(image);
+    }
+
+    public void deletePermanently(Long id) {
+        Image image = getImageById(id);
+
+        // Delete the physical file
+        try {
+            Path filePath = this.storageLocation.resolve(image.getStoredFilename());
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            // Log the error but don't fail the operation
+            System.err.println("Failed to delete physical file: " + e.getMessage());
+        }
+
+        // Delete from database
+        imageRepository.delete(image);
     }
 }

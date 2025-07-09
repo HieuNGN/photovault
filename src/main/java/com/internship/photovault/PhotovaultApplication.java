@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PhotovaultApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PhotovaultApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PhotovaultApplication.class, args);
+    }
 
 //	@PostConstruct
 //	public void checkEnvVars() {
