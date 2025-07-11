@@ -7,6 +7,7 @@ target/
 #Environment/Config Files
 .env
 src/main/resources/application.properties
+src/main/resources/db/migration/V2__create_users_table.sql
 
 #Codebase Summary
 repomix-output-HieuNGN-photovault.xml

@@ -9,7 +9,7 @@ interface ImageThumbnailProps {
     width?: number | string;
     height?: number | string;
     sx?: any;
-    fallbackToRegular?: boolean; // Whether to fallback to regular download endpoint
+    fallbackToRegular?: boolean; // Whether to fallback to regular download endpoint. what exactly is regular download endpoint? enyway
 }
 
 const ImageThumbnail: React.FC<ImageThumbnailProps> = ({
