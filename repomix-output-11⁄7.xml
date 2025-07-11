@@ -87,7 +87,7 @@ photovault-be/
           internship/
             photovault/
               config/
-                EnvConfig.java
+                CorsConfig.java
                 FileValidationConfig.java
               controller/
                 HealthCheckController.java
@@ -131,8 +131,14 @@ photovault-fe/
     robots.txt
   src/
     components/
+      ImageCard/
+        ImageCard.tsx
+      ImageThumbnail/
+        ImageThumbnail.tsx
       ImageUploads/
         ImageUploads.tsx
+    hooks/
+      useThumbnail.ts
     pages/
       Archive.tsx
       Favorites.tsx
@@ -151,6 +157,7 @@ photovault-fe/
     react-app-env.d.ts
     reportWebVitals.ts
     setupTests.ts
+  .env
   .gitignore
   package.json
   photovault-fe.iml
@@ -1096,6 +1103,8 @@ bc6e60531e4e6693a67fa96712dc553aed9c90a4 dda0fe8f5bd79c11fff5640537a0c17b5690cfc
 dda0fe8f5bd79c11fff5640537a0c17b5690cfc2 a4e1c3121c1f541c1447503c2ba8497b252d5a8b HieuNg <hn65563@gmail.com> 1751274073 +0700	commit: updated a schema and changes to methods, handlers
 a4e1c3121c1f541c1447503c2ba8497b252d5a8b cc59d79ec436e0994aacb1d916d5b5abc2db738e HieuNGN <hn65563@gmail.com> 1751824366 +0700	commit: bug in db
 cc59d79ec436e0994aacb1d916d5b5abc2db738e 24aea3093246c4561c88b88a50743c0fc0eb441d HieuNGN <hn65563@gmail.com> 1751824451 +0700	commit: bug in db config is not fixed yet
+24aea3093246c4561c88b88a50743c0fc0eb441d 51a9f6286fd7f0a077201a6c9c2416b84e17edf2 HieuNGN <hn65563@gmail.com> 1752083011 +0700	commit: updated UI, got rid of the api test
+51a9f6286fd7f0a077201a6c9c2416b84e17edf2 ae5cfd956c8997ad44147df7f830273c2a23c684 HieuNGN <hn65563@gmail.com> 1752218352 +0700	commit: Major update before shifting form
 </file>
 
 <file path="photovault-be/.git/logs/refs/remotes/origin/master">
@@ -1108,6 +1117,8 @@ ad823362172f8760c4d8326c6096d347713ccadb 9ace6613dac31cce19beadaa39c13df4d277982
 bc6e60531e4e6693a67fa96712dc553aed9c90a4 dda0fe8f5bd79c11fff5640537a0c17b5690cfc2 HieuNg <hn65563@gmail.com> 1751268789 +0700	update by push
 dda0fe8f5bd79c11fff5640537a0c17b5690cfc2 a4e1c3121c1f541c1447503c2ba8497b252d5a8b HieuNg <hn65563@gmail.com> 1751274081 +0700	update by push
 a4e1c3121c1f541c1447503c2ba8497b252d5a8b 24aea3093246c4561c88b88a50743c0fc0eb441d HieuNGN <hn65563@gmail.com> 1751824458 +0700	update by push
+24aea3093246c4561c88b88a50743c0fc0eb441d 51a9f6286fd7f0a077201a6c9c2416b84e17edf2 HieuNGN <hn65563@gmail.com> 1752083496 +0700	update by push
+51a9f6286fd7f0a077201a6c9c2416b84e17edf2 ae5cfd956c8997ad44147df7f830273c2a23c684 HieuNGN <hn65563@gmail.com> 1752218367 +0700	update by push
 </file>
 
 <file path="photovault-be/.git/logs/HEAD">
@@ -1124,18 +1135,20 @@ bc6e60531e4e6693a67fa96712dc553aed9c90a4 dda0fe8f5bd79c11fff5640537a0c17b5690cfc
 dda0fe8f5bd79c11fff5640537a0c17b5690cfc2 a4e1c3121c1f541c1447503c2ba8497b252d5a8b HieuNg <hn65563@gmail.com> 1751274073 +0700	commit: updated a schema and changes to methods, handlers
 a4e1c3121c1f541c1447503c2ba8497b252d5a8b cc59d79ec436e0994aacb1d916d5b5abc2db738e HieuNGN <hn65563@gmail.com> 1751824366 +0700	commit: bug in db
 cc59d79ec436e0994aacb1d916d5b5abc2db738e 24aea3093246c4561c88b88a50743c0fc0eb441d HieuNGN <hn65563@gmail.com> 1751824451 +0700	commit: bug in db config is not fixed yet
+24aea3093246c4561c88b88a50743c0fc0eb441d 51a9f6286fd7f0a077201a6c9c2416b84e17edf2 HieuNGN <hn65563@gmail.com> 1752083011 +0700	commit: updated UI, got rid of the api test
+51a9f6286fd7f0a077201a6c9c2416b84e17edf2 ae5cfd956c8997ad44147df7f830273c2a23c684 HieuNGN <hn65563@gmail.com> 1752218352 +0700	commit: Major update before shifting form
 </file>
 
 <file path="photovault-be/.git/refs/heads/master">
-24aea3093246c4561c88b88a50743c0fc0eb441d
+ae5cfd956c8997ad44147df7f830273c2a23c684
 </file>
 
 <file path="photovault-be/.git/refs/remotes/origin/master">
-24aea3093246c4561c88b88a50743c0fc0eb441d
+ae5cfd956c8997ad44147df7f830273c2a23c684
 </file>
 
 <file path="photovault-be/.git/COMMIT_EDITMSG">
-bug in db config is not fixed yet
+Major update before shifting form
 </file>
 
 <file path="photovault-be/.git/config">
@@ -1145,7 +1158,7 @@ bug in db config is not fixed yet
 	bare = false
 	logallrefupdates = true
 [remote "origin"]
-	url = https://github.com/HieuNGN/photovault.git
+	url = git@github.com:HieuNGN/photovault.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
 </file>
 
@@ -1179,33 +1192,25 @@ distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.10/apache-maven-3.9.10-bin.zip
 </file>
 
-<file path="photovault-be/src/main/java/com/internship/photovault/config/EnvConfig.java">
+<file path="photovault-be/src/main/java/com/internship/photovault/config/CorsConfig.java">
 package com.internship.photovault.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
-import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class EnvConfig {
+@EnableWebMvc
+public class CorsConfig implements WebMvcConfigurer {
 
-    @PostConstruct
-    public void loadEnvVariables() {
-        try {
-            Dotenv dotenv = Dotenv.configure()
-                    .directory("./")
-                    .filename(".env")
-                    .ignoreIfMissing()
-                    .load();
-
-            // Set system properties so Spring can access them
-            dotenv.entries().forEach(entry -> {
-                System.setProperty(entry.getKey(), entry.getValue());
-                System.out.println("Loaded env var: " + entry.getKey() + " = " + entry.getValue());
-            });
-        } catch (Exception e) {
-            System.err.println("Failed to load .env file: " + e.getMessage());
-        }
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
 </file>
@@ -1238,7 +1243,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/health")
 public class HealthCheckController {
 
-    @GetMapping("/healthcheck")
+    @GetMapping // This creates GET /health
     public String checkHealth() {
         return "Houston, we are live! API is working";
     }
@@ -1271,12 +1276,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/images")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @Validated
 public class ImageController {
 
@@ -1305,6 +1311,68 @@ public class ImageController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Failed to upload image: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/upload/multiple")
+    public ResponseEntity<?> uploadMultipleImages(@RequestParam("files") @NotNull MultipartFile[] files) {
+        try {
+            if (files.length == 0) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "No files uploaded"));
+            }
+
+
+            List<Map<String, Object>> results = new ArrayList<>();
+            List<Image> successfulUploads = new ArrayList<>();
+            List<Map<String, String>> failedUploads = new ArrayList<>();
+
+            for (int i = 0; i < files.length; i++) {
+                MultipartFile file = files[i];
+                try {
+                    if (!file.isEmpty()) {
+                        Image savedImage = imageService.saveImage(file);
+                        successfulUploads.add(savedImage);
+                        results.add(Map.of(
+                                "index", i,
+                                "filename", file.getOriginalFilename(),
+                                "status", "success",
+                                "image", savedImage
+                        ));
+                    } else {
+                        failedUploads.add(Map.of(
+                                "index", String.valueOf(i),
+                                "filename", file.getOriginalFilename() != null ? file.getOriginalFilename() : "unknown",
+                                "error", "File is empty"
+                        ));
+                    }
+                } catch (InvalidFileTypeException e) {
+                    failedUploads.add(Map.of(
+                            "index", String.valueOf(i),
+                            "filename", file.getOriginalFilename() != null ? file.getOriginalFilename() : "unknown",
+                            "error", e.getMessage()
+                    ));
+                } catch (Exception e) {
+                    failedUploads.add(Map.of(
+                            "index", String.valueOf(i),
+                            "filename", file.getOriginalFilename() != null ? file.getOriginalFilename() : "unknown",
+                            "error", "Upload failed: " + e.getMessage()
+                    ));
+                }
+            }
+
+            return ResponseEntity.ok(Map.of(
+                    "message", String.format("Processed %d files: %d successful, %d failed",
+                            files.length, successfulUploads.size(), failedUploads.size()),
+                    "successful", successfulUploads.size(),
+                    "failed", failedUploads.size(),
+                    "results", results,
+                    "errors", failedUploads
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to process uploads: " + e.getMessage()));
         }
     }
 
@@ -1384,7 +1452,7 @@ public class ImageController {
     public ResponseEntity<?> deleteImage(@PathVariable Long id) {
         try {
             imageService.moveToTrash(id);
-            return ResponseEntity.ok(Map.of("message", "Image moved to trash"));
+            return ResponseEntity.ok(Map.of("message", "Item moved to trash"));
         } catch (ImageNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
@@ -1399,6 +1467,55 @@ public class ImageController {
                     "isArchived", image.getIsArchived()
             ));
         } catch (ImageNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/archived")
+    public ResponseEntity<List<Image>> getArchivedImages() {
+        List<Image> archivedImages = imageService.getArchivedImages();
+        return ResponseEntity.ok(archivedImages);
+    }
+
+//    adding the backend endpoints for the trash and restore functions
+    @GetMapping("/trash")
+    public ResponseEntity<List<Image>> getTrashedImages() {
+        List<Image> trashedImages = imageService.getTrashedImages();
+        return ResponseEntity.ok(trashedImages);
+    }
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<?> restoreImage(@PathVariable Long id) {
+        try {
+            Image image = imageService.restoreFromTrash(id);
+            return ResponseEntity.ok(Map.of(
+                    "message", "Item restored from trash",
+                    "image", image
+            ));
+        } catch (ImageNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping("/{id}/permanent")
+    public ResponseEntity<?> deletePermanently(@PathVariable Long id) {
+        try {
+            imageService.deletePermanently(id);
+            return ResponseEntity.ok(Map.of("message", "Item permanently deleted"));
+        } catch (ImageNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/thumbnail")
+    public ResponseEntity<Resource> getThumbnail(@PathVariable Long id) {
+        try {
+            // Use internal method to bypass deletion check
+            Image image = imageService.getImageByIdInternal(id);
+            Resource resource = imageService.loadImageAsResource(image.getStoredFilename());
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(image.getContentType()))
+                    .body(resource);
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -1487,7 +1604,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 // This annotation tells Spring to respond with a 404 NOT FOUND status when this exception is thrown
-@ResponseStatus(HttpStatus.NOT_FOUND)
+//@ResponseStatus(HttpStatus.NOT_FOUND)
 public class ImageNotFoundException extends RuntimeException {
     public ImageNotFoundException(String message) {
         super(message);
@@ -1599,7 +1716,8 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
-//@Repository // Marks this as a Spring repository bean
+// Early creation blank test
+//@Repository
 //public interface ImageRepository extends JpaRepository<Image, Long> {
 //    // Spring Data JPA will automatically implement all basic CRUD methods.
 //    // We can add custom query methods here later if needed.
@@ -1610,35 +1728,37 @@ import java.util.Optional;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    // Find non-deleted images
-    @Query("SELECT i FROM Image i WHERE i.isDeleted = false")
+    @Query("SELECT i FROM Image i WHERE i.isDeleted = false ORDER BY i.uploadDate DESC")
     Page<Image> findAllActive(Pageable pageable);
 
-    // Find favorites
+    @Query("SELECT i FROM Image i WHERE i.isDeleted = false ORDER BY i.uploadDate DESC")
+    List<Image> findAllActive();
+
+// Add proper generics to all methods, update the find all to exclude deleted
+//    @Query("SELECT i FROM Image i WHERE i.isDeleted = false")
+//    Page<Image> findAllActive(Pageable pageable);
+
     @Query("SELECT i FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false")
     List<Image> findFavorites();
 
-    // Find archived images
     @Query("SELECT i FROM Image i WHERE i.isArchived = true AND i.isDeleted = false")
     List<Image> findArchived();
 
-    // Find trash (soft deleted)
     @Query("SELECT i FROM Image i WHERE i.isDeleted = true")
     List<Image> findTrash();
 
-    // Find by filename
     Optional<Image> findByFilenameAndIsDeletedFalse(String filename);
 
-    // Search by original filename
     @Query("SELECT i FROM Image i WHERE i.originalFilename ILIKE %:searchTerm% AND i.isDeleted = false")
     List<Image> searchByOriginalFilename(@Param("searchTerm") String searchTerm);
 
-    // Count statistics
     @Query("SELECT COUNT(i) FROM Image i WHERE i.isDeleted = false")
     long countActiveImages();
 
     @Query("SELECT COUNT(i) FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false")
     long countFavorites();
+
+    Optional<Object> findByStoredFilename(String filename);
 }
 </file>
 
@@ -1654,8 +1774,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -1677,7 +1800,7 @@ public class ImageService {
 
     public ImageService(@Value("${photovault.storage.location:./uploads}") String storageLocationPath,
                         ImageRepository imageRepository,
-                        FileValidationConfig fileValidationConfig, FileValidationConfig fileValidationConfig1) {
+                        FileValidationConfig fileValidationConfig) {
         this.storageLocation = Paths.get(storageLocationPath).toAbsolutePath().normalize();
         this.imageRepository = imageRepository;
         this.fileValidationConfig = fileValidationConfig;
@@ -1689,13 +1812,15 @@ public class ImageService {
         }
     }
 
-//    private boolean isValidImageType(String contentType) {
-//        return fileValidationConfig.isValidImageType(contentType);
-//    }
-
     public Image saveImage(MultipartFile file) throws IOException {
-        // Validate file type
-        if (!isValidImageType(file.getContentType())) {
+        // File size validation
+        long maxFileSize = 10 * 1024 * 1024; // 10MB
+        if (file.getSize() > maxFileSize) {
+            throw new MaxUploadSizeExceededException(maxFileSize);
+        }
+
+        // Validate file type using injected config
+        if (!fileValidationConfig.isValidImageType(file.getContentType())) {
             throw new InvalidFileTypeException("Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.");
         }
 
@@ -1724,24 +1849,51 @@ public class ImageService {
         return imageRepository.save(image);
     }
 
+    // Proper Page filtering for active images only
     public Page<Image> getAllImages(Pageable pageable) {
-        return imageRepository.findAll(pageable);
+        Page<Image> allImages = imageRepository.findAll(pageable);
+        List<Image> activeImages = allImages.getContent().stream()
+                .filter(image -> !image.getIsDeleted() && !image.getIsArchived())
+                .toList();
+
+        return new PageImpl<>(activeImages, pageable, getTotalActiveImageCount());
     }
 
-//    public List<Image> getAllImages() {
-//        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "uploadDate"));
-//    }
+    private long getTotalActiveImageCount() {
+        return imageRepository.findAll().stream()
+                .filter(image -> !image.getIsDeleted() && !image.getIsArchived())
+                .count();
+    }
 
-    public Image getImageById(Long id) {
+    // return active (non-deleted, non-archived) images
+    public List<Image> getAllImages() {
+        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "uploadDate")).stream()
+                .filter(image -> !image.getIsDeleted() && !image.getIsArchived())
+                .toList();
+    }
+
+    // Separate method for getting image by ID without deletion check (for internal use)
+    // Make the internal method public for thumbnail access
+    public Image getImageByIdInternal(Long id) {
         return imageRepository.findById(id)
                 .orElseThrow(() -> new ImageNotFoundException("Image not found with id: " + id));
     }
 
+    // Public method that checks for deletion
+    public Image getImageById(Long id) {
+        Image image = getImageByIdInternal(id);
+        if (image.getIsDeleted()) {
+            throw new ImageNotFoundException("Image has been deleted with id: " + id);
+        }
+        return image;
+    }
+
+    // Simplified resource loading without database lookup
     public Resource loadImageAsResource(String filename) {
         if (filename == null || filename.trim().isEmpty()) {
             throw new IllegalArgumentException("Filename cannot be null or empty");
         }
-        
+
         try {
             Path filePath = this.storageLocation.resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
@@ -1765,20 +1917,29 @@ public class ImageService {
     public List<Image> getFavorites() {
         return imageRepository.findAll().stream()
                 .filter(image -> image.getIsFavorite() && !image.getIsDeleted())
+                .sorted((a, b) -> b.getUploadDate().compareTo(a.getUploadDate()))
                 .toList();
     }
 
+    // Use getAllImages() method instead of non-existent findAllActive()
     public List<Image> searchImages(String query) {
-        return imageRepository.findAll().stream()
-                .filter(image -> !image.getIsDeleted() &&
-                        image.getOriginalFilename().toLowerCase().contains(query.toLowerCase()))
+        return getAllImages().stream()
+                .filter(image -> image.getOriginalFilename().toLowerCase().contains(query.toLowerCase()))
                 .toList();
     }
 
     public Map<String, Object> getImageStats() {
-        long totalImages = imageRepository.count();
-        long favoriteCount = getFavorites().size();
-        long archivedCount = imageRepository.findAll().stream()
+        List<Image> allImages = imageRepository.findAll();
+
+        long totalImages = allImages.stream()
+                .filter(image -> !image.getIsDeleted())
+                .count();
+
+        long favoriteCount = allImages.stream()
+                .filter(image -> image.getIsFavorite() && !image.getIsDeleted())
+                .count();
+
+        long archivedCount = allImages.stream()
                 .filter(image -> image.getIsArchived() && !image.getIsDeleted())
                 .count();
 
@@ -1789,25 +1950,57 @@ public class ImageService {
         );
     }
 
-    public void moveToTrash(Long id) {
-        Image image = getImageById(id);
-        image.setIsDeleted(true);
-        imageRepository.save(image);
-    }
-
     public Image toggleArchive(Long id) {
         Image image = getImageById(id);
         image.setIsArchived(!image.getIsArchived());
         return imageRepository.save(image);
     }
 
-    private boolean isValidImageType(String contentType) {
-        return contentType != null && (
-                contentType.equals("image/jpeg") ||
-                        contentType.equals("image/png") ||
-                        contentType.equals("image/gif") ||
-                        contentType.equals("image/webp")
-        );
+    public List<Image> getArchivedImages() {
+        return imageRepository.findAll().stream()
+                .filter(image -> image.getIsArchived() && !image.getIsDeleted())
+                .sorted((a, b) -> b.getUpdatedAt().compareTo(a.getUpdatedAt()))
+                .toList();
+    }
+
+    public List<Image> getTrashedImages() {
+        return imageRepository.findAll().stream()
+                .filter(Image::getIsDeleted)
+                .sorted((a, b) -> b.getUpdatedAt().compareTo(a.getUpdatedAt()))
+                .toList();
+    }
+
+    public void moveToTrash(Long id) {
+        Image image = getImageById(id);
+        image.setIsDeleted(true);
+        imageRepository.save(image);
+    }
+
+    // Fixed: Use internal method to bypass deletion check
+    public Image restoreFromTrash(Long id) {
+        Image image = getImageByIdInternal(id);
+        if (!image.getIsDeleted()) {
+            throw new IllegalStateException("Image is not in trash");
+        }
+        image.setIsDeleted(false);
+        return imageRepository.save(image);
+    }
+
+    // Fixed: Use internal method and renamed for consistency
+    public void deletePermanently(Long id) {
+        Image image = getImageByIdInternal(id);
+
+        // Delete the physical file
+        try {
+            Path filePath = this.storageLocation.resolve(image.getStoredFilename());
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            // Log the error but don't fail the operation
+            System.err.println("Failed to delete physical file: " + e.getMessage());
+        }
+
+        // Delete from database
+        imageRepository.delete(image);
     }
 }
 </file>
@@ -2468,6 +2661,531 @@ Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
 	</build>
 
 </project>
+</file>
+
+<file path="photovault-fe/src/components/ImageCard/ImageCard.tsx">
+import React from 'react';
+import { Card, CardMedia, CardActions, IconButton } from '@mui/material';
+import { Favorite, FavoriteBorder, Archive, Download, Delete } from '@mui/icons-material';
+import { Image } from '../../types/Image';
+
+interface ImageCardProps {
+    image: Image;
+    onToggleFavorite: (id: number) => void;
+    onToggleArchive: (id: number) => void;
+    onDownload: (id: number, filename: string) => void;
+    onDelete: (id: number) => void;
+}
+
+const ImageCard: React.FC<ImageCardProps> = React.memo(({
+                                                            image,
+                                                            onToggleFavorite,
+                                                            onToggleArchive,
+                                                            onDownload,
+                                                            onDelete
+                                                        }) => {
+    return (
+        <Card>
+            <CardMedia
+                component="img"
+                height="200"
+                image={`http://localhost:8080/images/${image.id}/download`}
+                alt={image.originalFilename}
+                sx={{ objectFit: 'cover' }}
+            />
+            <CardActions>
+                <IconButton
+                    onClick={() => onToggleFavorite(image.id)}
+                    color={image.isFavorite ? 'error' : 'default'}
+                >
+                    {image.isFavorite ? <Favorite /> : <FavoriteBorder />}
+                </IconButton>
+                <IconButton onClick={() => onToggleArchive(image.id)}>
+                    <Archive />
+                </IconButton>
+                <IconButton onClick={() => onDownload(image.id, image.originalFilename)}>
+                    <Download />
+                </IconButton>
+                <IconButton onClick={() => onDelete(image.id)}>
+                    <Delete />
+                </IconButton>
+            </CardActions>
+        </Card>
+    );
+});
+
+export default ImageCard;
+</file>
+
+<file path="photovault-fe/src/components/ImageThumbnail/ImageThumbnail.tsx">
+import React, { useState, useEffect } from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { BrokenImage } from '@mui/icons-material';
+import { imageApi } from '../../services/api';
+
+interface ImageThumbnailProps {
+    imageId: number;
+    alt: string;
+    width?: number | string;
+    height?: number | string;
+    sx?: any;
+    fallbackToRegular?: boolean; // Whether to fallback to regular download endpoint
+}
+
+const ImageThumbnail: React.FC<ImageThumbnailProps> = ({
+                                                           imageId,
+                                                           alt,
+                                                           width = 200,
+                                                           height = 200,
+                                                           sx = {},
+                                                           fallbackToRegular = false
+                                                       }) => {
+    const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        const loadThumbnail = async () => {
+            try {
+                setLoading(true);
+                setError(false);
+
+                // Try thumbnail endpoint first
+                const response = await imageApi.getThumbnail(imageId);
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                setThumbnailUrl(url);
+            } catch (err) {
+                if (fallbackToRegular) {
+                    try {
+                        // Fallback to regular download endpoint
+                        const response = await imageApi.downloadImage(imageId);
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        setThumbnailUrl(url);
+                    } catch (fallbackErr) {
+                        setError(true);
+                    }
+                } else {
+                    setError(true);
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadThumbnail();
+
+        // Cleanup function to revoke object URL
+        return () => {
+            if (thumbnailUrl) {
+                window.URL.revokeObjectURL(thumbnailUrl);
+            }
+        };
+    }, [imageId, fallbackToRegular]);
+
+    if (loading) {
+        return (
+            <Box
+                sx={{
+                    width,
+                    height,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#f5f5f5',
+                    borderRadius: 1,
+                    ...sx
+                }}
+            >
+                <CircularProgress size={24} />
+            </Box>
+        );
+    }
+
+    if (error || !thumbnailUrl) {
+        return (
+            <Box
+                sx={{
+                    width,
+                    height,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#f5f5f5',
+                    borderRadius: 1,
+                    color: '#666',
+                    ...sx
+                }}
+            >
+                <BrokenImage sx={{ fontSize: 32, mb: 1 }} />
+                <Typography variant="caption">Failed to load</Typography>
+            </Box>
+        );
+    }
+
+    return (
+        <Box
+            component="img"
+            src={thumbnailUrl}
+            alt={alt}
+            sx={{
+                width,
+                height,
+                objectFit: 'cover',
+                borderRadius: 1,
+                ...sx
+            }}
+        />
+    );
+};
+
+export default ImageThumbnail;
+</file>
+
+<file path="photovault-fe/src/hooks/useThumbnail.ts">
+import { useState, useEffect } from 'react';
+import { imageApi } from '../services/api';
+
+export const useThumbnail = (imageId: number, fallbackToRegular = false) => {
+    const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        const loadThumbnail = async () => {
+            try {
+                setLoading(true);
+                setError(false);
+
+                const response = await imageApi.getThumbnail(imageId);
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                setThumbnailUrl(url);
+            } catch (err) {
+                if (fallbackToRegular) {
+                    try {
+                        const response = await imageApi.downloadImage(imageId);
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        setThumbnailUrl(url);
+                    } catch (fallbackErr) {
+                        setError(true);
+                    }
+                } else {
+                    setError(true);
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadThumbnail();
+
+        return () => {
+            if (thumbnailUrl) {
+                window.URL.revokeObjectURL(thumbnailUrl);
+            }
+        };
+    }, [imageId, fallbackToRegular]);
+
+    return { thumbnailUrl, loading, error };
+};
+</file>
+
+<file path="photovault-fe/.idea/inspectionProfiles/Project_Default.xml">
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+  </profile>
+</component>
+</file>
+
+<file path="photovault-fe/.idea/.gitignore">
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+</file>
+
+<file path="photovault-fe/.idea/modules.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/photovault-fe.iml" filepath="$PROJECT_DIR$/.idea/photovault-fe.iml" />
+    </modules>
+  </component>
+</project>
+</file>
+
+<file path="photovault-fe/.idea/photovault-fe.iml">
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+</file>
+
+<file path="photovault-fe/.idea/vcs.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+  </component>
+</project>
+</file>
+
+<file path="photovault-fe/public/index.html">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
+</file>
+
+<file path="photovault-fe/public/manifest.json">
+{
+  "short_name": "React App",
+  "name": "Create React App Sample",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
+</file>
+
+<file path="photovault-fe/public/robots.txt">
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+</file>
+
+<file path="photovault-fe/src/index.css">
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+</file>
+
+<file path="photovault-fe/src/index.tsx">
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+</file>
+
+<file path="photovault-fe/src/logo.svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3"><g fill="#61DAFB"><path d="M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z"/><circle cx="420.9" cy="296.5" r="45.7"/><path d="M520.5 78.1z"/></g></svg>
+</file>
+
+<file path="photovault-fe/src/react-app-env.d.ts">
+/// <reference types="react-scripts" />
+</file>
+
+<file path="photovault-fe/src/reportWebVitals.ts">
+import { ReportHandler } from 'web-vitals';
+
+const reportWebVitals = (onPerfEntry?: ReportHandler) => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
+  }
+};
+
+export default reportWebVitals;
+</file>
+
+<file path="photovault-fe/src/setupTests.ts">
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';
+</file>
+
+<file path="photovault-fe/.env">
+REACT_APP_API_URL=http://localhost:8080
+</file>
+
+<file path="photovault-fe/.gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+</file>
+
+<file path="photovault-fe/photovault-fe.iml">
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+</file>
+
+<file path="photovault-fe/README.md">
+# Getting Started with Create React App
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
 </file>
 
 <file path="photovault-fe/repomix-output.xml">
@@ -3322,563 +4040,6 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 </files>
 </file>
 
-<file path="photovault-fe/.idea/inspectionProfiles/Project_Default.xml">
-<component name="InspectionProjectProfileManager">
-  <profile version="1.0">
-    <option name="myName" value="Project Default" />
-    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
-  </profile>
-</component>
-</file>
-
-<file path="photovault-fe/.idea/.gitignore">
-# Default ignored files
-/shelf/
-/workspace.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
-</file>
-
-<file path="photovault-fe/.idea/modules.xml">
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/photovault-fe.iml" filepath="$PROJECT_DIR$/.idea/photovault-fe.iml" />
-    </modules>
-  </component>
-</project>
-</file>
-
-<file path="photovault-fe/.idea/photovault-fe.iml">
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="WEB_MODULE" version="4">
-  <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/temp" />
-      <excludeFolder url="file://$MODULE_DIR$/tmp" />
-    </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-</module>
-</file>
-
-<file path="photovault-fe/.idea/vcs.xml">
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
-  </component>
-</project>
-</file>
-
-<file path="photovault-fe/public/index.html">
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
-</html>
-</file>
-
-<file path="photovault-fe/public/manifest.json">
-{
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
-}
-</file>
-
-<file path="photovault-fe/public/robots.txt">
-# https://www.robotstxt.org/robotstxt.html
-User-agent: *
-Disallow:
-</file>
-
-<file path="photovault-fe/src/components/ImageUploads/ImageUploads.tsx">
-import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { Box, Typography, CircularProgress, Alert } from '@mui/material';
-import { CloudUpload } from '@mui/icons-material';
-import { imageApi } from '../../services/api';
-
-interface ImageUploadProps {
-    onUploadSuccess: () => void;
-}
-
-const ImageUpload: React.FC<ImageUploadProps> = ({ onUploadSuccess }) => {
-    const [uploading, setUploading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
-
-    const onDrop = useCallback(async (acceptedFiles: File[]) => {
-        const file = acceptedFiles[0];
-        if (!file) return;
-
-        setUploading(true);
-        setError(null);
-        setSuccess(null);
-
-        try {
-            await imageApi.uploadImage(file);
-            setSuccess(`Successfully uploaded ${file.name}`);
-            onUploadSuccess();
-        } catch (err: any) {
-            setError(err.response?.data?.error || 'Upload failed');
-        } finally {
-            setUploading(false);
-        }
-    }, [onUploadSuccess]);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: {
-            'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
-        },
-        maxSize: 10 * 3840 * 2160, // 10MB
-        multiple: false
-    });
-
-    return (
-        <Box sx={{ mb: 4 }}>
-            <Box
-                {...getRootProps()}
-                sx={{
-                    border: '2px dashed #ccc',
-                    borderRadius: 2,
-                    p: 4,
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    backgroundColor: isDragActive ? '#f5f5f5' : 'transparent',
-                    '&:hover': {
-                        backgroundColor: '#f9f9f9',
-                    },
-                }}
-            >
-                <input {...getInputProps()} />
-                {uploading ? (
-                    <CircularProgress />
-                ) : (
-                    <>
-                        <CloudUpload sx={{ fontSize: 48, color: '#666', mb: 2 }} />
-                        <Typography variant="h6" gutterBottom>
-                            {isDragActive ? 'Drop the image here' : 'Drag & drop an image here'}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            or click to select a file
-                        </Typography>
-                        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                            Supports: JPEG, PNG, GIF, WebP (max 10MB)
-                        </Typography>
-                    </>
-                )}
-            </Box>
-
-            {error && (
-                <Alert severity="error" sx={{ mt: 2 }}>
-                    {error}
-                </Alert>
-            )}
-
-            {success && (
-                <Alert severity="success" sx={{ mt: 2 }}>
-                    {success}
-                </Alert>
-            )}
-        </Box>
-    );
-};
-
-export default ImageUpload;
-</file>
-
-<file path="photovault-fe/src/pages/Archive.tsx">
-import React from 'react';
-
-const Archive: React.FC = () => {
-    return (
-        <div>
-            <h1>Archive</h1>
-            <p>Archived images will appear here</p>
-        </div>
-    );
-};
-
-export default Archive;
-</file>
-
-<file path="photovault-fe/src/pages/Favorites.tsx">
-import React from 'react';
-
-const Favorites: React.FC = () => {
-    return (
-        <div>
-            <h1>Favorites</h1>
-            <p>Your favorite images will appear here</p>
-        </div>
-    );
-};
-
-export default Favorites;
-</file>
-
-<file path="photovault-fe/src/pages/Home.tsx">
-import React from 'react';
-
-const Home: React.FC = () => {
-    return (
-        <div>
-            <h1>Home Page</h1>
-            <p>Welcome to PhotoVault</p>
-        </div>
-    );
-};
-
-export default Home;
-</file>
-
-<file path="photovault-fe/src/pages/Trash.tsx">
-import React from 'react';
-
-const Trash: React.FC = () => {
-    return (
-        <div>
-            <h1>Trash</h1>
-            <p>Deleted images will appear here</p>
-        </div>
-    );
-};
-
-export default Trash;
-</file>
-
-<file path="photovault-fe/src/services/api.ts">
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:8080/';
-
-const api = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
-
-// export interface Image {
-//     id: number;
-//     filename: string;
-//     storedFilename: string;
-//     originalFilename: string;
-//     filePath: string;
-//     fileSize: number;
-//     contentType: string;
-//     uploadDate: string;
-//     isFavorite: boolean;
-//     isArchived: boolean;
-//     isDeleted: boolean;
-// }
-
-export const imageApi = {
-    // Test connection
-    testConnection: () =>
-        api.get('/health'),
-
-    // Upload image
-    uploadImage: (file: File) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        return api.post('/images/upload', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-    },
-
-    // Get all images with pagination
-    getAllImages: (page = 0, size = 10) =>
-        api.get(`/images?page=${page}&size=${size}`),
-
-    // Get image by ID
-    getImageById: (id: number) =>
-        api.get(`/images/${id}`),
-
-    // Download image
-    downloadImage: (id: number) =>
-        api.get(`/images/${id}/download`, { responseType: 'blob' }),
-
-    // Toggle favorite
-    toggleFavorite: (id: number) =>
-        api.put(`/images/${id}/favorite`),
-
-    // Get favorites
-    getFavorites: () =>
-        api.get('/images/favorites'),
-
-    // Search images
-    searchImages: (query: string) =>
-        api.get(`/images/search?query=${query}`),
-
-    // Delete image (move to trash)
-    deleteImage: (id: number) =>
-        api.delete(`/images/${id}`),
-
-    // Get stats
-    getStats: () =>
-        api.get('/images/stats'),
-};
-
-export default api;
-</file>
-
-<file path="photovault-fe/src/types/Image.ts">
-export interface Image {
-    id: number;
-    filename: string;
-    storedFilename: string;
-    originalFilename: string;
-    filePath: string;
-    fileSize: number;
-    contentType: string;
-    uploadDate: string;
-    isFavorite: boolean;
-    isArchived: boolean;
-    isDeleted: boolean;
-}
-</file>
-
-<file path="photovault-fe/src/App.test.tsx">
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
-
-test('renders photovault title', () => {
-  render(<App />);
-  const titleElement = screen.getByText(/Photovault API Test in progress/i);
-  expect(titleElement).toBeInTheDocument();
-});
-</file>
-
-<file path="photovault-fe/src/index.css">
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-</file>
-
-<file path="photovault-fe/src/index.tsx">
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
-</file>
-
-<file path="photovault-fe/src/logo.svg">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3"><g fill="#61DAFB"><path d="M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z"/><circle cx="420.9" cy="296.5" r="45.7"/><path d="M520.5 78.1z"/></g></svg>
-</file>
-
-<file path="photovault-fe/src/react-app-env.d.ts">
-/// <reference types="react-scripts" />
-</file>
-
-<file path="photovault-fe/src/reportWebVitals.ts">
-import { ReportHandler } from 'web-vitals';
-
-const reportWebVitals = (onPerfEntry?: ReportHandler) => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
-
-export default reportWebVitals;
-</file>
-
-<file path="photovault-fe/src/setupTests.ts">
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
-</file>
-
-<file path="photovault-fe/.gitignore">
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-</file>
-
-<file path="photovault-fe/photovault-fe.iml">
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="WEB_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$" />
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-</module>
-</file>
-
-<file path="photovault-fe/README.md">
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-</file>
-
 <file path="photovault-fe/tsconfig.json">
 {
   "compilerOptions": {
@@ -3913,230 +4074,1468 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 Icon=folder-violet
 </file>
 
-<file path="photovault-fe/src/App.tsx">
+<file path="photovault-fe/src/components/ImageUploads/ImageUploads.tsx">
+import React, { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import {
+    Box,
+    Typography,
+    CircularProgress,
+    Alert,
+    LinearProgress,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Chip,
+    Button
+    // FormControlLabel,
+    // Switch
+} from '@mui/material';
+import { CloudUpload, CheckCircle, Error, Image as ImageIcon, Clear } from '@mui/icons-material';
+import { imageApi } from '../../services/api';
+
+interface ImageUploadProps {
+    onUploadSuccess: () => void;
+}
+
+interface FileWithPreview extends File {
+    preview?: string;
+}
+
+interface UploadResult {
+    filename: string;
+    status: 'success' | 'error';
+    message?: string;
+    error?: string;
+}
+
+const ImageUpload: React.FC<ImageUploadProps> = ({ onUploadSuccess }) => {
+    const [files, setFiles] = useState<FileWithPreview[]>([]);
+    const [uploading, setUploading] = useState(false);
+    const [uploadResults, setUploadResults] = useState<UploadResult[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+    // const [multipleMode, setMultipleMode] = useState(false);
+    // const [uploadProgress, setUploadProgress] = useState(0);
+
+    const onDrop = useCallback(async (acceptedFiles: File[]) => {
+        const filesWithPreview = acceptedFiles.map(file =>
+            Object.assign(file, {
+                preview: URL.createObjectURL(file)
+            })
+        );
+
+        // making multiple upload default
+        // if (multipleMode) {
+        //     setFiles(prev => [...prev, ...filesWithPreview]);
+        // } else {
+        //     setFiles(filesWithPreview.slice(0, 1)); // Only take first file in single mode
+        // }
+        // if (!file) return;
+
+        setFiles(prev => [...prev, ...filesWithPreview]);
+        // setUploading(true);
+        setError(null);
+        setSuccess(null);
+        setUploadResults([]);
+    }, []);
+
+    const removeFile = (fileToRemove: FileWithPreview) => {
+        setFiles(files => {
+            const newFiles = files.filter(file => file !== fileToRemove);
+            if (fileToRemove.preview) {
+                URL.revokeObjectURL(fileToRemove.preview);
+            }
+            return newFiles;
+        });
+    };
+
+    const handleUpload = async () => {
+        if (files.length === 0) return;
+
+        setUploading(true);
+        setError(null);
+        setSuccess(null);
+        setUploadResults([]);
+        // setUploadProgress(0);
+
+        try {
+            if (files.length === 1) {
+                const response = await imageApi.uploadImage(files[0]);
+                setSuccess(`Successfully uploaded ${files[0].name}`);
+                setUploadResults([{
+                    filename: files[0].name,
+                    status: 'success'
+                }]);
+            } else {
+                // Multiple file upload
+                const response = await imageApi.uploadMultipleImagesWithProgress(files);
+                const data = response.data;
+
+                setSuccess(data.message);
+
+                // Process results
+                const results: UploadResult[] = [];
+                data.results?.forEach((result: any) => {
+                    results.push({
+                        filename: result.filename,
+                        status: result.status
+                    });
+                });
+
+                data.errors?.forEach((error: any) => {
+                    results.push({
+                        filename: error.filename,
+                        status: 'error',
+                        error: error.error
+                    });
+                });
+
+                setUploadResults(results);
+            }
+            // setting multiple as default
+            //     if (data.successful > 0) {
+            //         setTimeout(() => {
+            //             onUploadSuccess();
+            //             clearFiles();
+            //         }, 2000);
+            //     }
+            // } else {
+            //     // Single file upload
+            //     const response = await imageApi.uploadImage(files[0]);
+            //     setSuccess(`Successfully uploaded ${files[0].name}`);
+            //     setUploadResults([{
+            //         filename: files[0].name,
+            //         status: 'success'
+            //     }]);
+
+            setTimeout(() => {
+                onUploadSuccess();
+                clearFiles();
+            }, files.length === 1 ? 1000 : 2000);
+        } catch (err: any) {
+            const errorMessage = err.response?.data?.error || 'Upload failed';
+            setError(errorMessage);
+            setUploadResults([{
+                filename: files[0]?.name || 'Unknown',
+                status: 'error',
+                error: errorMessage
+            }]);
+        } finally {
+            setUploading(false);
+            // setUploadProgress(0);
+        }
+    };
+
+    const clearFiles = () => {
+        files.forEach(file => {
+            if (file.preview) {
+                URL.revokeObjectURL(file.preview);
+            }
+        });
+        setFiles([]);
+        setUploadResults([]);
+        setError(null);
+        setSuccess(null);
+    };
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
+        },
+        maxSize: 10 * 1024 * 1024, // 10MB per file
+        multiple: true //replace multipleMode with true to set default
+    });
+
+    // Cleanup on unmounting
+    React.useEffect(() => {
+        return () => {
+            files.forEach(file => {
+                if (file.preview) {
+                    URL.revokeObjectURL(file.preview);
+                }
+            });
+        };
+    }, [files]);
+
+    // remove to implement multiple files upload
+    //     try {
+    //         await imageApi.uploadImage(file);
+    //         setSuccess(`Successfully uploaded ${file.name}`);
+    //         setTimeout(() => {
+    //             onUploadSuccess();
+    //         }, 1000);
+    //     } catch (err: any) {
+    //         setError(err.response?.data?.error || 'Upload failed');
+    //     } finally {
+    //         setUploading(false);
+    //     }
+    // }, [onUploadSuccess]);
+    //
+    // const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    //     onDrop,
+    //     accept: {
+    //         'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
+    //     },
+    //     maxSize: 10 * 1024 * 1024, // 10MB
+    //     multiple: false
+    // });
+
+    return (
+        <Box sx={{ mb: 2 }}>
+            {/* Multiple upload toggle, removed to set multi as default */}
+            {/*<FormControlLabel*/}
+            {/*    control={*/}
+            {/*        <Switch*/}
+            {/*            checked={multipleMode}*/}
+            {/*            onChange={(e) => {*/}
+            {/*                setMultipleMode(e.target.checked);*/}
+            {/*                if (!e.target.checked && files.length > 1) {*/}
+            {/*                    // Keep only the first file when switching to single mode*/}
+            {/*                    const firstFile = files[0];*/}
+            {/*                    files.slice(1).forEach(file => {*/}
+            {/*                        if (file.preview) URL.revokeObjectURL(file.preview);*/}
+            {/*                    });*/}
+            {/*                    setFiles([firstFile]);*/}
+            {/*                }*/}
+            {/*            }}*/}
+            {/*        />*/}
+            {/*    }*/}
+            {/*    label="Multiple file upload"*/}
+            {/*    sx={{ mb: 2 }}*/}
+            {/*/>*/}
+
+            {/*drop zones*/}
+            <Box
+                {...getRootProps()}
+                sx={{
+                    border: '2px dashed #ccc',
+                    borderRadius: 2,
+                    p: 4,
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    backgroundColor: isDragActive ? '#f5f5f5' : 'transparent',
+                    '&:hover': {
+                        backgroundColor: '#f9f9f9',
+                    },
+                }}
+            >
+                <input {...getInputProps()} />
+                {uploading ? (
+                    <Box>
+                        <CircularProgress sx={{ mb: 2 }} />
+                        <Typography>Uploading...</Typography>
+                        <LinearProgress sx={{ mt: 1 }} />
+                    </Box>
+                ) : (
+                    <>
+                        <CloudUpload sx={{ fontSize: 48, color: '#666', mb: 2 }} />
+                        <Typography variant="h6" gutterBottom>
+                            {isDragActive ? 'Drop the image here' : 'Drag & drop an image here'}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                            or click to select a file
+                        </Typography>
+                        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+                            Supports: JPEG, PNG, GIF, WebP (max 10MB)
+                        </Typography>
+                    </>
+                )}
+            </Box>
+
+            {/* File preview list */}
+            {files.length > 0 && (
+                <Box sx={{ mt: 2 }}>
+                    <Typography variant="subtitle2" gutterBottom>
+                        Selected Files ({files.length})
+                    </Typography>
+                    <List dense>
+                        {files.map((file, index) => (
+                            <ListItem key={index} sx={{ pl: 0 }}>
+                                <ListItemIcon>
+                                    <ImageIcon />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={file.name}
+                                    secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
+                                />
+                                <Chip
+                                    label={`${(file.size / 1024 / 1024).toFixed(1)}MB`}
+                                    size="small"
+                                    sx={{ mr: 1 }}
+                                />
+                                <Button
+                                    size="small"
+                                    onClick={() => removeFile(file)}
+                                    disabled={uploading}
+                                >
+                                    <Clear />
+                                </Button>
+                            </ListItem>
+                        ))}
+                    </List>
+
+                    <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                        <Button
+                            variant="contained"
+                            onClick={handleUpload}
+                            disabled={uploading || files.length === 0}
+                        >
+                            Upload {files.length > 1 ? `${files.length} Files` : 'File'}
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            onClick={clearFiles}
+                            disabled={uploading}
+                        >
+                            Clear All
+                        </Button>
+                    </Box>
+                </Box>
+            )}
+
+            {/* Upload results */}
+            {uploadResults.length > 0 && (
+                <Box sx={{ mt: 2 }}>
+                    <Typography variant="subtitle2" gutterBottom>
+                        Upload Results
+                    </Typography>
+                    <List dense>
+                        {uploadResults.map((result, index) => (
+                            <ListItem key={index} sx={{ pl: 0 }}>
+                                <ListItemIcon>
+                                    {result.status === 'success' ?
+                                        <CheckCircle color="success" /> :
+                                        <Error color="error" />
+                                    }
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={result.filename}
+                                    secondary={result.error || 'Uploaded successfully'}
+                                />
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+            )}
+
+            {/*errors & success messages*/}
+            {error && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                    {error}
+                </Alert>
+            )}
+
+            {success && (
+                <Alert severity="success" sx={{ mt: 2 }}>
+                    {success}
+                </Alert>
+            )}
+        </Box>
+    );
+};
+
+export default ImageUpload;
+
+// old blank test
+// import React, { useCallback, useState } from 'react';
+// import { useDropzone } from 'react-dropzone';
+// import { Box, Typography, CircularProgress, Alert } from '@mui/material';
+// import { CloudUpload } from '@mui/icons-material';
+// import { imageApi } from '../../services/api';
+//
+// interface ImageUploadProps {
+//     onUploadSuccess: () => void;
+// }
+//
+// const ImageUpload: React.FC<ImageUploadProps> = ({ onUploadSuccess }) => {
+//     const [uploading, setUploading] = useState(false);
+//     const [error, setError] = useState<string | null>(null);
+//     const [success, setSuccess] = useState<string | null>(null);
+//
+//     const onDrop = useCallback(async (acceptedFiles: File[]) => {
+//         const file = acceptedFiles[0];
+//         if (!file) return;
+//
+//         setUploading(true);
+//         setError(null);
+//         setSuccess(null);
+//
+//         try {
+//             await imageApi.uploadImage(file);
+//             setSuccess(`Successfully uploaded ${file.name}`);
+//             onUploadSuccess();
+//         } catch (err: any) {
+//             setError(err.response?.data?.error || 'Upload failed');
+//         } finally {
+//             setUploading(false);
+//         }
+//     }, [onUploadSuccess]);
+//
+//     const { getRootProps, getInputProps, isDragActive } = useDropzone({
+//         onDrop,
+//         accept: {
+//             'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
+//         },
+//         maxSize: 10 * 1024 * 1024, // 10MB
+//         multiple: false
+//     });
+//
+//     return (
+//         <Box sx={{ mb: 4 }}>
+//             <Box
+//                 {...getRootProps()}
+//                 sx={{
+//                     border: '2px dashed #ccc',
+//                     borderRadius: 2,
+//                     p: 4,
+//                     textAlign: 'center',
+//                     cursor: 'pointer',
+//                     backgroundColor: isDragActive ? '#f5f5f5' : 'transparent',
+//                     '&:hover': {
+//                         backgroundColor: '#f9f9f9',
+//                     },
+//                 }}
+//             >
+//                 <input {...getInputProps()} />
+//                 {uploading ? (
+//                     <CircularProgress />
+//                 ) : (
+//                     <>
+//                         <CloudUpload sx={{ fontSize: 48, color: '#666', mb: 2 }} />
+//                         <Typography variant="h6" gutterBottom>
+//                             {isDragActive ? 'Drop the image here' : 'Drag & drop an image here'}
+//                         </Typography>
+//                         <Typography variant="body2" color="textSecondary">
+//                             or click to select a file
+//                         </Typography>
+//                         <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+//                             Supports: JPEG, PNG, GIF, WebP (max 10MB)
+//                         </Typography>
+//                     </>
+//                 )}
+//             </Box>
+//
+//             {error && (
+//                 <Alert severity="error" sx={{ mt: 2 }}>
+//                     {error}
+//                 </Alert>
+//             )}
+//
+//             {success && (
+//                 <Alert severity="success" sx={{ mt: 2 }}>
+//                     {success}
+//                 </Alert>
+//             )}
+//         </Box>
+//     );
+// };
+//
+// export default ImageUpload;
+</file>
+
+<file path="photovault-fe/src/pages/Archive.tsx">
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
-  Typography,
-  Box,
-  Button,
-  Alert,
-  CircularProgress,
-  Paper,
-  Grid
+    Box,
+    Typography,
+    Grid,
+    Card,
+    CardMedia,
+    CardActions,
+    IconButton,
+    Alert,
+    CircularProgress
 } from '@mui/material';
-import { CheckCircle, Error, Cloud } from '@mui/icons-material';
-import { imageApi } from './services/api';
+import { Unarchive, Download, Delete } from '@mui/icons-material';
+import { imageApi } from '../services/api';
+import { Image } from '../types/Image';
 
-interface ConnectionStatus {
-  backend: 'loading' | 'success' | 'error';
-  message: string;
-}
+const Archive: React.FC = () => {
+    const [archivedImages, setArchivedImages] = useState<Image[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-function App() {
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>({
-    backend: 'loading',
-    message: 'Testing connection...'
-  });
-  const [stats, setStats] = useState<any>(null);
-  const [images, setImages] = useState<any>(null);
-
-  // Test backend connection
-  const testBackendConnection = async () => {
-    try {
-      setConnectionStatus({ backend: 'loading', message: 'Testing backend connection...' });
-      const response = await imageApi.testConnection();
-      setConnectionStatus({
-        backend: 'success',
-        message: `Backend connected: ${response.data}`
-      });
-    } catch (error: any) {
-      setConnectionStatus({
-        backend: 'error',
-        message: `Backend connection failed: ${error.message}`
-      });
-    }
-  };
-
-  // Test stats endpoint
-  const testStatsEndpoint = async () => {
-    try {
-      const response = await imageApi.getStats();
-      setStats(response.data);
-    } catch (error: any) {
-      console.error('Stats endpoint failed:', error);
-    }
-  };
-
-  // Test images endpoint
-  const testImagesEndpoint = async () => {
-    try {
-      const response = await imageApi.getAllImages();
-      setImages(response.data);
-    } catch (error: any) {
-      console.error('Images endpoint failed:', error);
-    }
-  };
-
-  // Test file upload
-  const testFileUpload = async () => {
-    // Create a small test image file
-    const canvas = document.createElement('canvas');
-    canvas.width = 100;
-    canvas.height = 100;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.fillStyle = '#4CAF50';
-      ctx.fillRect(0, 0, 100, 100);
-      ctx.fillStyle = 'white';
-      ctx.font = '16px Arial';
-      ctx.fillText('TEST', 30, 55);
-    }
-
-    canvas.toBlob(async (blob) => {
-      if (blob) {
-        const testFile = new File([blob], 'test-image.png', { type: 'image/png' });
+    const loadArchivedImages = async () => {
         try {
-          const response = await imageApi.uploadImage(testFile);
-          alert(`Upload successful: ${JSON.stringify(response.data.message)}`);
-          // Refresh stats and images after upload
-          await testStatsEndpoint();
-          await testImagesEndpoint();
-        } catch (error: any) {
-          alert(`Upload failed: ${error.response?.data?.error || error.message}`);
+            setLoading(true);
+            const response = await imageApi.getArchivedImages();
+            setArchivedImages(response.data);
+            setError(null);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to load archived images');
+        } finally {
+            setLoading(false);
         }
-      }
-    }, 'image/png');
-  };
+    };
 
-  useEffect(() => {
-    testBackendConnection();
-    testStatsEndpoint();
-    testImagesEndpoint();
-  }, []);
+    useEffect(() => {
+        loadArchivedImages();
+    }, []);
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'loading': return <CircularProgress size={20} />;
-      case 'success': return <CheckCircle color="success" />;
-      case 'error': return <Error color="error" />;
-      default: return null;
+    const handleUnarchiveImage = async (imageId: number) => {
+        try {
+            await imageApi.toggleArchive(imageId);
+            loadArchivedImages(); // Refresh the list
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to unarchive image');
+        }
+    };
+
+    const handleDeleteImage = async (imageId: number) => {
+        try {
+            await imageApi.deleteImage(imageId);
+            loadArchivedImages(); // Refresh the list
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to delete image');
+        }
+    };
+
+    const handleDownloadImage = async (imageId: number, filename: string) => {
+        try {
+            const response = await imageApi.downloadImage(imageId);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to download image');
+        }
+    };
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress />
+            </Box>
+        );
     }
-  };
 
-  return (
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center">
-          📸 PhotoVault API Test
-        </Typography>
+    return (
+        <Box>
+            <Typography variant="h4" component="h1" gutterBottom>
+                📁 Archived Images
+            </Typography>
 
-        <Typography variant="subtitle1" align="center" color="textSecondary" sx={{ mb: 4 }}>
-          Testing connection between React frontend and Spring Boot backend
-        </Typography>
+            {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {error}
+                </Alert>
+            )}
 
-        {/* Connection Status */}
-        <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
-          <Box display="flex" alignItems="center" gap={2}>
-            {getStatusIcon(connectionStatus.backend)}
-            <Typography variant="h6">Backend Connection</Typography>
-          </Box>
-          <Alert
-              severity={connectionStatus.backend === 'success' ? 'success' :
-                  connectionStatus.backend === 'error' ? 'error' : 'info'}
-              sx={{ mt: 2 }}
-          >
-            {connectionStatus.message}
-          </Alert>
-        </Paper>
-
-        {/* API Endpoints Test */}
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper elevation={2} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                📊 Stats Endpoint
-              </Typography>
-              {stats ? (
-                  <Box>
-                    <Typography>Total Images: {stats.totalImages}</Typography>
-                    <Typography>Favorites: {stats.favorites}</Typography>
-                    <Typography>Archived: {stats.archived}</Typography>
-                  </Box>
-              ) : (
-                  <Typography color="textSecondary">Loading stats...</Typography>
-              )}
-              <Button
-                  variant="outlined"
-                  onClick={testStatsEndpoint}
-                  sx={{ mt: 2 }}
-              >
-                Refresh Stats
-              </Button>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper elevation={2} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                🖼️ Images Endpoint
-              </Typography>
-              {images ? (
-                  <Box>
-                    <Typography>
-                      Found: {images.totalElements || images.length || 0} images
+            {archivedImages.length === 0 ? (
+                <Box textAlign="center" py={8}>
+                    <Typography variant="h6" color="textSecondary" gutterBottom>
+                        No archived images
                     </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                      {images.content ? 'Paginated response' : 'Simple array response'}
+                    <Typography variant="body2" color="textSecondary">
+                        Archive images to organize your collection
                     </Typography>
-                  </Box>
-              ) : (
-                  <Typography color="textSecondary">Loading images...</Typography>
-              )}
-              <Button
-                  variant="outlined"
-                  onClick={testImagesEndpoint}
-                  sx={{ mt: 2 }}
-              >
-                Refresh Images
-              </Button>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12 }}>
-            <Paper elevation={2} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                ⬆️ Upload Test
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-                This will create and upload a small test image to verify the upload endpoint.
-              </Typography>
-              <Button
-                  variant="contained"
-                  onClick={testFileUpload}
-                  startIcon={<Cloud />}
-                  disabled={connectionStatus.backend !== 'success'}
-              >
-                Test Upload
-              </Button>
-            </Paper>
-          </Grid>
-        </Grid>
-
-        {/* Retry Connection */}
-        <Box textAlign="center" sx={{ mt: 4 }}>
-          <Button
-              variant="outlined"
-              onClick={testBackendConnection}
-              disabled={connectionStatus.backend === 'loading'}
-          >
-            Retry Connection Test
-          </Button>
+                </Box>
+            ) : (
+                <Grid container spacing={3}>
+                    {archivedImages.map((image) => (
+                        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={image.id}>
+                            <Card>
+                                <CardMedia
+                                    component="img"
+                                    height="200"
+                                    image={`http://localhost:8080/images/${image.id}/download`}
+                                    alt={image.originalFilename}
+                                    sx={{ objectFit: 'cover' }}
+                                />
+                                <CardActions>
+                                    <IconButton
+                                        onClick={() => handleUnarchiveImage(image.id)}
+                                        color="primary"
+                                        title="Unarchive"
+                                    >
+                                        <Unarchive />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => handleDownloadImage(image.id, image.originalFilename)}
+                                        title="Download"
+                                    >
+                                        <Download />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => handleDeleteImage(image.id)}
+                                        title="Delete"
+                                    >
+                                        <Delete />
+                                    </IconButton>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
         </Box>
-      </Container>
-  );
-}
+    );
+};
 
-export default App;
+export default Archive;
+</file>
+
+<file path="photovault-fe/src/pages/Favorites.tsx">
+import React, { useState, useEffect } from 'react';
+import {
+    Box,
+    Typography,
+    Grid,
+    Card,
+    CardMedia,
+    CardActions,
+    IconButton,
+    Alert,
+    CircularProgress
+} from '@mui/material';
+import { Favorite, Download, Delete } from '@mui/icons-material';
+import { imageApi } from '../services/api';
+import { Image } from '../types/Image';
+
+const Favorites: React.FC = () => {
+    const [favorites, setFavorites] = useState<Image[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const loadFavorites = async () => {
+        try {
+            setLoading(true);
+            const response = await imageApi.getFavorites();
+            setFavorites(response.data);
+            setError(null);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to load favorites');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadFavorites();
+    }, []);
+
+    const handleRemoveFromFavorites = async (imageId: number) => {
+        try {
+            await imageApi.toggleFavorite(imageId);
+            loadFavorites(); // Refresh the list
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to remove from favorites');
+        }
+    };
+
+    const handleDownloadImage = async (imageId: number, filename: string) => {
+        try {
+            const response = await imageApi.downloadImage(imageId);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to download image');
+        }
+    };
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    return (
+        <Box>
+            <Typography variant="h4" component="h1" gutterBottom>
+                ❤️ Favorite Images
+            </Typography>
+
+            {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {error}
+                </Alert>
+            )}
+
+            {favorites.length === 0 ? (
+                <Box textAlign="center" py={8}>
+                    <Typography variant="h6" color="textSecondary" gutterBottom>
+                        No favorite images yet
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Mark images as favorites from the home page to see them here
+                    </Typography>
+                </Box>
+            ) : (
+                <Grid container spacing={3}>
+                    {favorites.map((image) => (
+                        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={image.id}>
+                            <Card>
+                                <CardMedia
+                                    component="img"
+                                    height="200"
+                                    image={`http://localhost:8080/images/${image.id}/download`}
+                                    alt={image.originalFilename}
+                                    sx={{ objectFit: 'cover' }}
+                                />
+                                <CardActions>
+                                    <IconButton
+                                        onClick={() => handleRemoveFromFavorites(image.id)}
+                                        color="error"
+                                    >
+                                        <Favorite />
+                                    </IconButton>
+                                    <IconButton onClick={() => handleDownloadImage(image.id, image.originalFilename)}>
+                                        <Download />
+                                    </IconButton>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
+        </Box>
+    );
+};
+
+export default Favorites;
+</file>
+
+<file path="photovault-fe/src/pages/Home.tsx">
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import {
+    Box,
+    Typography,
+    Grid,
+    Card,
+    // CardMedia,
+    CardActions,
+    IconButton,
+    Fab,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Alert,
+    CircularProgress,
+    TextField,
+    InputAdornment
+} from '@mui/material';
+import {
+    Favorite,
+    FavoriteBorder,
+    Delete,
+    Archive,
+    Add,
+    Download,
+    Search
+} from '@mui/icons-material';
+import { imageApi } from '../services/api';
+import { Image } from '../types/Image';
+import ImageUpload from '../components/ImageUploads/ImageUploads';
+import ImageThumbnail from "../components/ImageThumbnail/ImageThumbnail";
+
+const Home: React.FC = () => {
+    const [images, setImages] = useState<Image[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // remove unused filter
+    // const [filteredImages, setFilteredImages] = useState<Image[]>([]);
+
+    const useDebounce = (value: string, delay: number) => {
+        const [debouncedValue, setDebouncedValue] = useState(value);
+
+        useEffect(() => {
+            const handler = setTimeout(() => {
+                setDebouncedValue(value);
+            }, delay);
+
+            return () => {
+                clearTimeout(handler);
+            };
+        }, [value, delay]);
+
+        return debouncedValue;
+    };
+
+    // use debounce searchquery
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
+    // temp fix for the reloading loop
+    // const loadImages = useCallback(async () => {
+    //     try {
+    //         setLoading(true);
+    //         const response = await imageApi.getAllImages();
+    //         setImages(response.data.content || response.data);
+    //         setError(null);
+    //     } catch (err: any) {
+    //         setError(err.response?.data?.error || 'Failed to load images');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }, []);
+
+    // temp fix for reloading loop
+    // const loadImages = async () => {
+    //     try {
+    //         setLoading(true);
+    //         const response = await imageApi.getAllImages();
+    //         setImages(response.data.content || response.data);
+    //         setError(null);
+    //     } catch (err: any) {
+    //         setError(err.response?.data?.error || 'Failed to load images');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+    //
+    // useEffect(() => {
+    //     loadImages();
+    // }, []); // Empty dependency array - runs only once on mountw
+
+    // test an alternative way without using loadImages
+    useEffect(() => {
+        const fetchAllImages = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+
+                let allImages: any[] = [];
+                let page = 0;
+                const pageSize = 100;
+                let hasMore = true;
+
+                while (hasMore) {
+                    const response = await imageApi.getAllImages(page, pageSize);
+                    const pageData = response.data.content || response.data || [];
+
+                    if (pageData.length === 0 || pageData.length < pageSize) {
+                        hasMore = false;
+                    }
+
+                    allImages = [...allImages, ...pageData];
+
+                    // Update UI progressively
+                    setImages([...allImages]);
+
+                    // Optional: Add delay to prevent overwhelming the server
+                    if (hasMore) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+
+                    page++;
+                }
+
+            } catch (err: any) {
+                setError(err.response?.data?.error || 'Failed to load images');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAllImages();
+    }, []);
+
+
+
+    const filteredImages = useMemo(() => {
+        if (debouncedSearchQuery.trim() === '') {
+            return images;
+        }
+        return images.filter(image =>
+            image.originalFilename.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        );
+    }, [images, debouncedSearchQuery]);
+
+    // replacing this as it causes flickers
+    // useEffect(() => {
+    //     loadImages();
+    //     if (searchQuery.trim() === '') {
+    //         setFilteredImages(images);
+    //     } else {
+    //         const filtered = images.filter(image =>
+    //             image.originalFilename.toLowerCase().includes(searchQuery.toLowerCase())
+    //         );
+    //         setFilteredImages(filtered);
+    //     }
+    // }, [images, loadImages, searchQuery]);
+
+    // replacing this to test alternative to loadImages
+    // const handleToggleFavorite = useCallback(async (imageId: number) => {
+    //     try {
+    //         await imageApi.toggleFavorite(imageId);
+    //         loadImages(); // Refresh the list
+    //     } catch (err: any) {
+    //         setError(err.response?.data?.error || 'Failed to update favorite');
+    //     }
+    // }, [loadImages]);
+    //
+    // const handleDeleteImage = useCallback(async (imageId: number) => {
+    //     try {
+    //         await imageApi.deleteImage(imageId);
+    //         loadImages(); // Refresh the list
+    //     } catch (err: any) {
+    //         setError(err.response?.data?.error || 'Failed to delete image');
+    //     }
+    // }, [loadImages]);
+    //
+    // const handleUploadSuccess = useCallback(() => {
+    //     setUploadDialogOpen(false);
+    //     loadImages();
+    // }, [loadImages]);
+    //
+    // const handleToggleArchive = useCallback(async (imageId: number) => {
+    //     try {
+    //         await imageApi.toggleArchive(imageId);
+    //         loadImages(); // Refresh the list
+    //     } catch (err: any) {
+    //         setError(err.response?.data?.error || 'Failed to archive image');
+    //     }
+    // }, [loadImages]);
+
+    const handleToggleFavorite = async (imageId: number) => {
+        try {
+            await imageApi.toggleFavorite(imageId);
+            // Refresh images after action
+            const response = await imageApi.getAllImages();
+            setImages(response.data.content || response.data);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to update favorite');
+        }
+    };
+
+    const handleDeleteImage = async (imageId: number) => {
+        try {
+            await imageApi.deleteImage(imageId);
+            // Refresh images after action
+            const response = await imageApi.getAllImages();
+            setImages(response.data.content || response.data);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to delete image');
+        }
+    };
+
+    const handleToggleArchive = async (imageId: number) => {
+        try {
+            await imageApi.toggleArchive(imageId);
+            // Refresh images after action
+            const response = await imageApi.getAllImages();
+            setImages(response.data.content || response.data);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to archive image');
+        }
+    };
+
+    const handleUploadSuccess = () => {
+        setUploadDialogOpen(false);
+        // Refresh images after upload
+        const fetchImages = async () => {
+            try {
+                const response = await imageApi.getAllImages();
+                setImages(response.data.content || response.data);
+            } catch (err: any) {
+                setError(err.response?.data?.error || 'Failed to refresh images');
+            }
+        };
+        fetchImages();
+    };
+
+    // move the download handler for better access to modify the others
+    const handleDownloadImage = useCallback(async (imageId: number, filename: string) => {
+        try {
+            const response = await imageApi.downloadImage(imageId);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to download image');
+        }
+    }, []);
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    return (
+        <Box>
+            <Typography variant="h4" component="h1" gutterBottom>
+                My Images
+            </Typography>
+
+            <TextField
+                fullWidth
+                placeholder="Search images..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                sx={{ mb: 3 }}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <Search />
+                        </InputAdornment>
+                    ),
+                }}
+            />
+
+            {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {error}
+                </Alert>
+            )}
+
+            {images.length === 0 ? (
+                <Box textAlign="center" py={8}>
+                    <Typography variant="h6" color="textSecondary" gutterBottom>
+                        No images uploaded yet
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Click the + button to upload your first image
+                    </Typography>
+                </Box>
+            ) : (
+                <Grid container spacing={3}>
+                    {filteredImages.map((image) => (
+                        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={image.id}>
+                            <Card>
+                                {/*<CardMedia*/}
+                                {/*    component="img"*/}
+                                {/*    height="200"*/}
+                                {/*    image={`http://localhost:8080/images/${image.id}/download`}*/}
+                                {/*    alt={image.originalFilename}*/}
+                                {/*    sx={{ objectFit: 'cover' }}*/}
+                                {/*/>*/}
+                                <ImageThumbnail
+                                    imageId={image.id}
+                                    alt={image.originalFilename}
+                                    width="100%"
+                                    height={200}
+                                    fallbackToRegular={true} // Fallback to regular download if thumbnail fails
+                                />
+                                <CardActions>
+                                    <IconButton
+                                        onClick={() => handleToggleFavorite(image.id)}
+                                        color={image.isFavorite ? 'error' : 'default'}
+                                    >
+                                        {image.isFavorite ? <Favorite /> : <FavoriteBorder />}
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => handleDownloadImage(image.id, image.originalFilename)}>
+                                        <Download />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => handleToggleArchive(image.id)}>
+                                    <Archive />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => handleDeleteImage(image.id)}>
+                                        <Delete />
+                                    </IconButton>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            )}
+
+            {/* Upload FAB */}
+            <Fab
+                color="primary"
+                aria-label="upload"
+                sx={{ position: 'fixed', bottom: 16, right: 16 }}
+                onClick={() => setUploadDialogOpen(true)}
+            >
+                <Add />
+            </Fab>
+
+            {/* Upload Dialog */}
+            <Dialog
+                open={uploadDialogOpen}
+                onClose={() => setUploadDialogOpen(false)}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>Upload New Image</DialogTitle>
+                <DialogContent>
+                    <ImageUpload onUploadSuccess={handleUploadSuccess} />
+                </DialogContent>
+            </Dialog>
+        </Box>
+    );
+};
+
+export default Home;
+
+// old post creation test blank page
+// import React from 'react';
+//
+// const Home: React.FC = () => {
+//     return (
+//         <div>
+//             <h1>Home Page</h1>
+//             <p>Welcome to PhotoVault</p>
+//         </div>
+//     );
+// };
+//
+// export default Home;
+</file>
+
+<file path="photovault-fe/src/pages/Trash.tsx">
+import React, { useState, useEffect } from 'react';
+import {
+    Box,
+    Typography,
+    Grid,
+    Card,
+    CardMedia,
+    CardActions,
+    IconButton,
+    Alert,
+    CircularProgress,
+    Button
+} from '@mui/material';
+import { Restore, DeleteForever } from '@mui/icons-material';
+import { imageApi } from '../services/api';
+import { Image } from '../types/Image';
+import ImageThumbnail from "../components/ImageThumbnail/ImageThumbnail";
+
+const Trash: React.FC = () => {
+    const [trashedImages, setTrashedImages] = useState<Image[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const loadTrashedImages = async () => {
+        try {
+            setLoading(true);
+            // We'll need to add this endpoint to the backend
+            const response = await imageApi.getTrashedImages();
+            setTrashedImages(response.data);
+            setError(null);
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to load trash');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadTrashedImages();
+    }, []);
+
+    const handleRestoreImage = async (imageId: number) => {
+        try {
+            await imageApi.restoreImage(imageId);
+            loadTrashedImages(); // Refresh the list
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Failed to restore image');
+        }
+    };
+
+    const handlePermanentDelete = async (imageId: number) => {
+        if (window.confirm('Are you sure? This will permanently delete the image and cannot be undone.')) {
+            try {
+                await imageApi.permanentlyDeleteImage(imageId);
+                loadTrashedImages(); // Refresh the list
+            } catch (err: any) {
+                setError(err.response?.data?.error || 'Failed to permanently delete image');
+            }
+        }
+    };
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress />
+            </Box>
+        );
+    }
+    // might as well delete this function since who the hell wants to download from trash
+    // const handleDownloadImage = async (imageId: number, filename: string) => {
+    //     try {
+    //         const response = await imageApi.downloadImage(imageId);
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement('a');
+    //         link.href = url;
+    //         link.setAttribute('download', filename);
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         link.remove();
+    //         window.URL.revokeObjectURL(url);
+    //     } catch (err: any) {
+    //         setError(err.response?.data?.error || 'Failed to download image');
+    //     }
+    // };
+    //
+    // if (loading) {
+    //     return (
+    //         <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+    //             <CircularProgress />
+    //         </Box>
+    //     );
+    // }
+
+    return (
+        <Box>
+            <Typography variant="h4" component="h1" gutterBottom>
+                🗑️ Trash
+            </Typography>
+
+            {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {error}
+                </Alert>
+            )}
+
+            {trashedImages.length === 0 ? (
+                <Box textAlign="center" py={8}>
+                    <Typography variant="h6" color="textSecondary" gutterBottom>
+                        Trash is empty
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Deleted images will appear here
+                    </Typography>
+                </Box>
+            ) : (
+                <>
+                    <Alert severity="info" sx={{ mb: 3 }}>
+                        Images in trash can be restored or permanently deleted.
+                        Permanent deletion cannot be undone.
+                    </Alert>
+
+                    <Grid container spacing={3}>
+                        {trashedImages.map((image) => (
+                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={image.id}>
+                                <Card sx={{ opacity: 0.7 }}>
+                                    {/*remove this to use thumbnail*/}
+                                    {/*<CardMedia*/}
+                                    {/*    component="img"*/}
+                                    {/*    height="200"*/}
+                                    {/*    image={`http://localhost:8080/images/${image.id}/download`}*/}
+                                    {/*    alt={image.originalFilename}*/}
+                                    {/*    sx={{ objectFit: 'cover' }}*/}
+                                    {/*/>*/}
+                                    <ImageThumbnail
+                                        imageId={image.id}
+                                        alt={image.originalFilename}
+                                        width="100%"
+                                        height={200}
+                                    />
+                                    <CardActions>
+                                        <IconButton
+                                            onClick={() => handleRestoreImage(image.id)}
+                                            color="primary"
+                                            title="Restore"
+                                        >
+                                            <Restore />
+                                        </IconButton>
+                                        {/*<IconButton*/}
+                                        {/*    onClick={() => handleDownloadImage(image.id, image.originalFilename)}*/}
+                                        {/*    title="Download"*/}
+                                        {/*>*/}
+                                        {/*    <Download />*/}
+                                        {/*</IconButton>*/}
+                                        <IconButton
+                                            onClick={() => handlePermanentDelete(image.id)}
+                                            color="error"
+                                            title="Delete Forever"
+                                        >
+                                            <DeleteForever />
+                                        </IconButton>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </>
+            )}
+        </Box>
+    );
+};
+
+export default Trash;
+</file>
+
+<file path="photovault-fe/src/services/api.ts">
+import axios from 'axios';
+
+// const API_BASE_URL = 'http://localhost:8080/';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
+const api = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    timeout: 10000,
+});
+
+export const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+// export interface Image {
+//     id: number;
+//     filename: string;
+//     storedFilename: string;
+//     originalFilename: string;
+//     filePath: string;
+//     fileSize: number;
+//     contentType: string;
+//     uploadDate: string;
+//     isFavorite: boolean;
+//     isArchived: boolean;
+//     isDeleted: boolean;
+// }
+
+export const imageApi = {
+    // Test connection
+    testConnection: () =>
+        api.get('/health'),
+
+    // Upload image
+    uploadImage: (file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return api.post('/images/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    },
+
+    // multiple files upload without progress tracking
+    // uploadMultipleImages: (files: File[]) => {
+    //     const formData = new FormData();
+    //     files.forEach(file => {
+    //         formData.append('files', file);
+    //     });
+    //     return api.post('/images/upload/multiple', formData, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //         },
+    //     });
+    // },
+
+    // progress tracking
+    uploadMultipleImagesWithProgress: (files: File[], onProgress?: (progress: number) => void) => {
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('files', file);
+        });
+
+        return api.post('/images/upload/multiple', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: (progressEvent) => {
+                if (onProgress && progressEvent.total) {
+                    const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    onProgress(progress);
+                }
+            }
+        });
+    },
+
+
+    // Get all images with pagination
+    getAllImages: (page = 0, size = 10) =>
+        api.get(`/images?page=${page}&size=${size}`),
+
+    // Get image by ID
+    getImageById: (id: number) =>
+        api.get(`/images/${id}`),
+
+    // Download image
+    downloadImage: (id: number) =>
+        api.get(`/images/${id}/download`, { responseType: 'blob' }),
+
+    // Toggle favorite
+    toggleFavorite: (id: number) =>
+        api.put(`/images/${id}/favorite`),
+
+    // Get favorites
+    getFavorites: () =>
+        api.get('/images/favorites'),
+
+    // Search images
+    searchImages: (query: string) =>
+        api.get(`/images/search?query=${query}`),
+
+    // Delete image (move to trash)
+    deleteImage: (id: number) =>
+        api.delete(`/images/${id}`),
+
+    // Get stats
+    getStats: () =>
+        api.get('/images/stats'),
+
+    getTrashedImages: () =>
+        api.get('/images/trash'),
+
+    restoreImage: (id: number) =>
+        api.put(`/images/${id}/restore`),
+
+    permanentlyDeleteImage: (id: number) =>
+        api.delete(`/images/${id}/permanent`),
+
+    toggleArchive: (id: number) =>
+        api.put(`/images/${id}/archive`),
+
+    getArchivedImages: () =>
+        api.get('/images/archived'),
+
+    getThumbnail: (id: number) =>
+        api.get(`/images/${id}/thumbnail`, { responseType: 'blob' }),
+};
+
+export default api;
+</file>
+
+<file path="photovault-fe/src/types/Image.ts">
+export interface Image {
+    id: number;
+    filename: string;
+    storedFilename: string;
+    originalFilename: string;
+    filePath: string;
+    fileSize: number;
+    contentType: string;
+    uploadDate: string;
+    isFavorite: boolean;
+    isArchived: boolean;
+    isDeleted: boolean;
+}
+</file>
+
+<file path="photovault-fe/src/App.test.tsx">
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders photovault title', () => {
+  render(<App />);
+  const titleElement = screen.getByText(/Photovault API Test in progress/i);
+  expect(titleElement).toBeInTheDocument();
+});
 </file>
 
 <file path="photovault-fe/package.json">
@@ -4233,6 +5632,270 @@ export default App;
     transform: rotate(360deg);
   }
 }
+</file>
+
+<file path="photovault-fe/src/App.tsx">
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
+import Home from './pages/Home';
+import Favorites from './pages/Favorites';
+import Archive from './pages/Archive';
+import Trash from './pages/Trash';
+
+function App() {
+  return (
+      <Router>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              📸 PhotoVault
+            </Typography>
+            <Button color="inherit" component={Link} to="/">Home</Button>
+            <Button color="inherit" component={Link} to="/favorites">Favorites</Button>
+            <Button color="inherit" component={Link} to="/archive">Archive</Button>
+            <Button color="inherit" component={Link} to="/trash">Trash</Button>
+          </Toolbar>
+        </AppBar>
+
+        <Container maxWidth="lg" sx={{ mt: 4 }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/archive" element={<Archive />} />
+            <Route path="/trash" element={<Trash />} />
+          </Routes>
+        </Container>
+      </Router>
+  );
+}
+
+export default App;
+
+// import React, { useState, useEffect } from 'react';
+// import {
+//   Container,
+//   Typography,
+//   Box,
+//   Button,
+//   Alert,
+//   CircularProgress,
+//   Paper,
+//   Grid
+// } from '@mui/material';
+// import { CheckCircle, Error, Cloud } from '@mui/icons-material';
+// import { imageApi } from './services/api';
+//
+//
+// interface ConnectionStatus {
+//   backend: 'loading' | 'success' | 'error';
+//   message: string;
+// }
+//
+// function App() {
+//   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>({
+//     backend: 'loading',
+//     message: 'Testing connection...'
+//   });
+//   const [stats, setStats] = useState<any>(null);
+//   const [images, setImages] = useState<any>(null);
+//
+//   // Test backend connection
+//   const testBackendConnection = async () => {
+//     try {
+//       setConnectionStatus({ backend: 'loading', message: 'Testing backend connection...' });
+//       const response = await imageApi.testConnection();
+//       setConnectionStatus({
+//         backend: 'success',
+//         message: `Backend connected: ${response.data}`
+//       });
+//     } catch (error: any) {
+//       setConnectionStatus({
+//         backend: 'error',
+//         message: `Backend connection failed: ${error.message}`
+//       });
+//     }
+//   };
+//
+//   // Test stats endpoint
+//   const testStatsEndpoint = async () => {
+//     try {
+//       const response = await imageApi.getStats();
+//       setStats(response.data);
+//     } catch (error: any) {
+//       console.error('Stats endpoint failed:', error);
+//     }
+//   };
+//
+//   // Test images endpoint
+//   const testImagesEndpoint = async () => {
+//     try {
+//       const response = await imageApi.getAllImages();
+//       setImages(response.data);
+//     } catch (error: any) {
+//       console.error('Images endpoint failed:', error);
+//     }
+//   };
+//
+//   // Test file upload
+//   const testFileUpload = async () => {
+//     // Create a small test image file
+//     const canvas = document.createElement('canvas');
+//     canvas.width = 100;
+//     canvas.height = 100;
+//     const ctx = canvas.getContext('2d');
+//     if (ctx) {
+//       ctx.fillStyle = '#4CAF50';
+//       ctx.fillRect(0, 0, 100, 100);
+//       ctx.fillStyle = 'white';
+//       ctx.font = '16px Arial';
+//       ctx.fillText('TEST', 30, 55);
+//     }
+//
+//     canvas.toBlob(async (blob) => {
+//       if (blob) {
+//         const testFile = new File([blob], 'test-image.png', { type: 'image/png' });
+//         try {
+//           const response = await imageApi.uploadImage(testFile);
+//           alert(`Upload successful: ${JSON.stringify(response.data.message)}`);
+//           // Refresh stats and images after upload
+//           await testStatsEndpoint();
+//           await testImagesEndpoint();
+//         } catch (error: any) {
+//           alert(`Upload failed: ${error.response?.data?.error || error.message}`);
+//         }
+//       }
+//     }, 'image/png');
+//   };
+//
+//   useEffect(() => {
+//     testBackendConnection();
+//     testStatsEndpoint();
+//     testImagesEndpoint();
+//   }, []);
+//
+//   const getStatusIcon = (status: string) => {
+//     switch (status) {
+//       case 'loading': return <CircularProgress size={20} />;
+//       case 'success': return <CheckCircle color="success" />;
+//       case 'error': return <Error color="error" />;
+//       default: return null;
+//     }
+//   };
+//
+//   return (
+//       <Container maxWidth="md" sx={{ py: 4 }}>
+//         <Typography variant="h3" component="h1" gutterBottom align="center">
+//           📸 PhotoVault API Test
+//         </Typography>
+//
+//         <Typography variant="subtitle1" align="center" color="textSecondary" sx={{ mb: 4 }}>
+//           Testing connection between React frontend and Spring Boot backend
+//         </Typography>
+//
+//         {/* Connection Status */}
+//         <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
+//           <Box display="flex" alignItems="center" gap={2}>
+//             {getStatusIcon(connectionStatus.backend)}
+//             <Typography variant="h6">Backend Connection</Typography>
+//           </Box>
+//           <Alert
+//               severity={connectionStatus.backend === 'success' ? 'success' :
+//                   connectionStatus.backend === 'error' ? 'error' : 'info'}
+//               sx={{ mt: 2 }}
+//           >
+//             {connectionStatus.message}
+//           </Alert>
+//         </Paper>
+//
+//         {/* API Endpoints Test */}
+//         <Grid container spacing={3}>
+//           <Grid size={{ xs: 12, md: 6 }}>
+//             <Paper elevation={2} sx={{ p: 3 }}>
+//               <Typography variant="h6" gutterBottom>
+//                 📊 Stats Endpoint
+//               </Typography>
+//               {stats ? (
+//                   <Box>
+//                     <Typography>Total Images: {stats.totalImages}</Typography>
+//                     <Typography>Favorites: {stats.favorites}</Typography>
+//                     <Typography>Archived: {stats.archived}</Typography>
+//                   </Box>
+//               ) : (
+//                   <Typography color="textSecondary">Loading stats...</Typography>
+//               )}
+//               <Button
+//                   variant="outlined"
+//                   onClick={testStatsEndpoint}
+//                   sx={{ mt: 2 }}
+//               >
+//                 Refresh Stats
+//               </Button>
+//             </Paper>
+//           </Grid>
+//
+//           <Grid size={{ xs: 12, md: 6 }}>
+//             <Paper elevation={2} sx={{ p: 3 }}>
+//               <Typography variant="h6" gutterBottom>
+//                 🖼️ Images Endpoint
+//               </Typography>
+//               {images ? (
+//                   <Box>
+//                     <Typography>
+//                       Found: {images.totalElements || images.length || 0} images
+//                     </Typography>
+//                     <Typography variant="caption" color="textSecondary">
+//                       {images.content ? 'Paginated response' : 'Simple array response'}
+//                     </Typography>
+//                   </Box>
+//               ) : (
+//                   <Typography color="textSecondary">Loading images...</Typography>
+//               )}
+//               <Button
+//                   variant="outlined"
+//                   onClick={testImagesEndpoint}
+//                   sx={{ mt: 2 }}
+//               >
+//                 Refresh Images
+//               </Button>
+//             </Paper>
+//           </Grid>
+//
+//           <Grid size={{ xs: 12 }}>
+//             <Paper elevation={2} sx={{ p: 3 }}>
+//               <Typography variant="h6" gutterBottom>
+//                 ⬆️ Upload Test
+//               </Typography>
+//               <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+//                 This will create and upload a small test image to verify the upload endpoint.
+//               </Typography>
+//               <Button
+//                   variant="contained"
+//                   onClick={testFileUpload}
+//                   startIcon={<Cloud />}
+//                   disabled={connectionStatus.backend !== 'success'}
+//               >
+//                 Test Upload
+//               </Button>
+//             </Paper>
+//           </Grid>
+//         </Grid>
+//
+//         {/* Retry Connection */}
+//         <Box textAlign="center" sx={{ mt: 4 }}>
+//           <Button
+//               variant="outlined"
+//               onClick={testBackendConnection}
+//               disabled={connectionStatus.backend === 'loading'}
+//           >
+//             Retry Connection Test
+//           </Button>
+//         </Box>
+//       </Container>
+//   );
+// }
+//
+// export default App;
 </file>
 
 </files>

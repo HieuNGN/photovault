@@ -43,6 +43,40 @@ export const imageApi = {
         });
     },
 
+    // multiple files upload without progress tracking
+    // uploadMultipleImages: (files: File[]) => {
+    //     const formData = new FormData();
+    //     files.forEach(file => {
+    //         formData.append('files', file);
+    //     });
+    //     return api.post('/images/upload/multiple', formData, {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data',
+    //         },
+    //     });
+    // },
+
+    // progress tracking
+    uploadMultipleImagesWithProgress: (files: File[], onProgress?: (progress: number) => void) => {
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('files', file);
+        });
+
+        return api.post('/images/upload/multiple', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: (progressEvent) => {
+                if (onProgress && progressEvent.total) {
+                    const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    onProgress(progress);
+                }
+            }
+        });
+    },
+
+
     // Get all images with pagination
     getAllImages: (page = 0, size = 10) =>
         api.get(`/images?page=${page}&size=${size}`),
@@ -89,6 +123,9 @@ export const imageApi = {
 
     getArchivedImages: () =>
         api.get('/images/archived'),
+
+    getThumbnail: (id: number) =>
+        api.get(`/images/${id}/thumbnail`, { responseType: 'blob' }),
 };
 
 export default api;

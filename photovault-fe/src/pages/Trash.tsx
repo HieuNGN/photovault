@@ -11,9 +11,10 @@ import {
     CircularProgress,
     Button
 } from '@mui/material';
-import { Restore, DeleteForever, Download } from '@mui/icons-material';
+import { Restore, DeleteForever } from '@mui/icons-material';
 import { imageApi } from '../services/api';
 import { Image } from '../types/Image';
+import ImageThumbnail from "../components/ImageThumbnail/ImageThumbnail";
 
 const Trash: React.FC = () => {
     const [trashedImages, setTrashedImages] = useState<Image[]>([]);
@@ -58,6 +59,13 @@ const Trash: React.FC = () => {
         }
     };
 
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <CircularProgress />
+            </Box>
+        );
+    }
     // might as well delete this function since who the hell wants to download from trash
     // const handleDownloadImage = async (imageId: number, filename: string) => {
     //     try {
@@ -115,12 +123,19 @@ const Trash: React.FC = () => {
                         {trashedImages.map((image) => (
                             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={image.id}>
                                 <Card sx={{ opacity: 0.7 }}>
-                                    <CardMedia
-                                        component="img"
-                                        height="200"
-                                        image={`http://localhost:8080/images/${image.id}/download`}
+                                    {/*remove this to use thumbnail*/}
+                                    {/*<CardMedia*/}
+                                    {/*    component="img"*/}
+                                    {/*    height="200"*/}
+                                    {/*    image={`http://localhost:8080/images/${image.id}/download`}*/}
+                                    {/*    alt={image.originalFilename}*/}
+                                    {/*    sx={{ objectFit: 'cover' }}*/}
+                                    {/*/>*/}
+                                    <ImageThumbnail
+                                        imageId={image.id}
                                         alt={image.originalFilename}
-                                        sx={{ objectFit: 'cover' }}
+                                        width="100%"
+                                        height={200}
                                     />
                                     <CardActions>
                                         <IconButton
