@@ -31,7 +31,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final FileValidationConfig fileValidationConfig;
 
-    public ImageService(@Value("${photovault.storage.location:./uploads}") String storageLocationPath,
+    public ImageService(@Value("${DB_LOCATION}") String storageLocationPath,
                         ImageRepository imageRepository,
                         FileValidationConfig fileValidationConfig) {
         this.storageLocation = Paths.get(storageLocationPath).toAbsolutePath().normalize();

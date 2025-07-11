@@ -10,7 +10,7 @@ CREATE TABLE storage_locations (
 
 -- Insert default storage location
 INSERT INTO storage_locations (name, base_path, storage_type)
-VALUES ('default-local', '/home/projs/Photovault/uploads', 'LOCAL');
+VALUES ('default-local', '${DB_LOCATION}', 'LOCAL');
 
 -- Create file metadata table
 CREATE TABLE file_metadata (

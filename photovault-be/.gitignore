@@ -7,6 +7,8 @@ target/
 #Environment/Config Files
 .env
 src/main/resources/application.properties
+
+#Database Migration Scripts that contains sensitive data
 src/main/resources/db/migration/V2__create_users_table.sql
 
 #Codebase Summary
