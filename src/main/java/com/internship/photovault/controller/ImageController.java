@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,68 @@ public class ImageController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Failed to upload image: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/upload/multiple")
+    public ResponseEntity<?> uploadMultipleImages(@RequestParam("files") @NotNull MultipartFile[] files) {
+        try {
+            if (files.length == 0) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "No files uploaded"));
+            }
+
+
+            List<Map<String, Object>> results = new ArrayList<>();
+            List<Image> successfulUploads = new ArrayList<>();
+            List<Map<String, String>> failedUploads = new ArrayList<>();
+
+            for (int i = 0; i < files.length; i++) {
+                MultipartFile file = files[i];
+                try {
+                    if (!file.isEmpty()) {
+                        Image savedImage = imageService.saveImage(file);
+                        successfulUploads.add(savedImage);
+                        results.add(Map.of(
+                                "index", i,
+                                "filename", file.getOriginalFilename(),
+                                "status", "success",
+                                "image", savedImage
+                        ));
+                    } else {
+                        failedUploads.add(Map.of(
+                                "index", String.valueOf(i),
+                                "filename", file.getOriginalFilename() != null ? file.getOriginalFilename() : "unknown",
+                                "error", "File is empty"
+                        ));
+                    }
+                } catch (InvalidFileTypeException e) {
+                    failedUploads.add(Map.of(
+                            "index", String.valueOf(i),
+                            "filename", file.getOriginalFilename() != null ? file.getOriginalFilename() : "unknown",
+                            "error", e.getMessage()
+                    ));
+                } catch (Exception e) {
+                    failedUploads.add(Map.of(
+                            "index", String.valueOf(i),
+                            "filename", file.getOriginalFilename() != null ? file.getOriginalFilename() : "unknown",
+                            "error", "Upload failed: " + e.getMessage()
+                    ));
+                }
+            }
+
+            return ResponseEntity.ok(Map.of(
+                    "message", String.format("Processed %d files: %d successful, %d failed",
+                            files.length, successfulUploads.size(), failedUploads.size()),
+                    "successful", successfulUploads.size(),
+                    "failed", failedUploads.size(),
+                    "results", results,
+                    "errors", failedUploads
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to process uploads: " + e.getMessage()));
         }
     }
 
@@ -184,4 +247,18 @@ public class ImageController {
         }
     }
 
+    @GetMapping("/{id}/thumbnail")
+    public ResponseEntity<Resource> getThumbnail(@PathVariable Long id) {
+        try {
+            // Use internal method to bypass deletion check
+            Image image = imageService.getImageByIdInternal(id);
+            Resource resource = imageService.loadImageAsResource(image.getStoredFilename());
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(image.getContentType()))
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

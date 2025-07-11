@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,20 +46,16 @@ public class ImageService {
             throw new RuntimeException("Could not create the storage directory.", e);
         }
     }
-    // Update the validation method to use injected config
-//    private boolean isValidImageType(String contentType) {
-//        return fileValidationConfig.isValidImageType(contentType);
-//    }
 
     public Image saveImage(MultipartFile file) throws IOException {
-        //file size validation
-        long maxFileSize = 10 * 1024 * 1024;
+        // File size validation
+        long maxFileSize = 10 * 1024 * 1024; // 10MB
         if (file.getSize() > maxFileSize) {
             throw new MaxUploadSizeExceededException(maxFileSize);
         }
 
-        // Validate file type
-        if (!isValidImageType(file.getContentType())) {
+        // Validate file type using injected config
+        if (!fileValidationConfig.isValidImageType(file.getContentType())) {
             throw new InvalidFileTypeException("Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.");
         }
 
@@ -86,24 +84,51 @@ public class ImageService {
         return imageRepository.save(image);
     }
 
+    // Proper Page filtering for active images only
     public Page<Image> getAllImages(Pageable pageable) {
-        return imageRepository.findAll(pageable);
+        Page<Image> allImages = imageRepository.findAll(pageable);
+        List<Image> activeImages = allImages.getContent().stream()
+                .filter(image -> !image.getIsDeleted() && !image.getIsArchived())
+                .toList();
+
+        return new PageImpl<>(activeImages, pageable, getTotalActiveImageCount());
     }
 
-//    public List<Image> getAllImages() {
-//        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "uploadDate"));
-//    }
+    private long getTotalActiveImageCount() {
+        return imageRepository.findAll().stream()
+                .filter(image -> !image.getIsDeleted() && !image.getIsArchived())
+                .count();
+    }
 
-    public Image getImageById(Long id) {
+    // return active (non-deleted, non-archived) images
+    public List<Image> getAllImages() {
+        return imageRepository.findAll(Sort.by(Sort.Direction.DESC, "uploadDate")).stream()
+                .filter(image -> !image.getIsDeleted() && !image.getIsArchived())
+                .toList();
+    }
+
+    // Separate method for getting image by ID without deletion check (for internal use)
+    // Make the internal method public for thumbnail access
+    public Image getImageByIdInternal(Long id) {
         return imageRepository.findById(id)
                 .orElseThrow(() -> new ImageNotFoundException("Image not found with id: " + id));
     }
 
+    // Public method that checks for deletion
+    public Image getImageById(Long id) {
+        Image image = getImageByIdInternal(id);
+        if (image.getIsDeleted()) {
+            throw new ImageNotFoundException("Image has been deleted with id: " + id);
+        }
+        return image;
+    }
+
+    // Simplified resource loading without database lookup
     public Resource loadImageAsResource(String filename) {
         if (filename == null || filename.trim().isEmpty()) {
             throw new IllegalArgumentException("Filename cannot be null or empty");
         }
-        
+
         try {
             Path filePath = this.storageLocation.resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
@@ -127,20 +152,29 @@ public class ImageService {
     public List<Image> getFavorites() {
         return imageRepository.findAll().stream()
                 .filter(image -> image.getIsFavorite() && !image.getIsDeleted())
+                .sorted((a, b) -> b.getUploadDate().compareTo(a.getUploadDate()))
                 .toList();
     }
 
+    // Use getAllImages() method instead of non-existent findAllActive()
     public List<Image> searchImages(String query) {
-        return imageRepository.findAll().stream()
-                .filter(image -> !image.getIsDeleted() &&
-                        image.getOriginalFilename().toLowerCase().contains(query.toLowerCase()))
+        return getAllImages().stream()
+                .filter(image -> image.getOriginalFilename().toLowerCase().contains(query.toLowerCase()))
                 .toList();
     }
 
     public Map<String, Object> getImageStats() {
-        long totalImages = imageRepository.count();
-        long favoriteCount = getFavorites().size();
-        long archivedCount = imageRepository.findAll().stream()
+        List<Image> allImages = imageRepository.findAll();
+
+        long totalImages = allImages.stream()
+                .filter(image -> !image.getIsDeleted())
+                .count();
+
+        long favoriteCount = allImages.stream()
+                .filter(image -> image.getIsFavorite() && !image.getIsDeleted())
+                .count();
+
+        long archivedCount = allImages.stream()
                 .filter(image -> image.getIsArchived() && !image.getIsDeleted())
                 .count();
 
@@ -149,12 +183,6 @@ public class ImageService {
                 "favorites", favoriteCount,
                 "archived", archivedCount
         );
-    }
-
-    public void moveToTrash(Long id) {
-        Image image = getImageById(id);
-        image.setIsDeleted(true);
-        imageRepository.save(image);
     }
 
     public Image toggleArchive(Long id) {
@@ -170,24 +198,22 @@ public class ImageService {
                 .toList();
     }
 
-    private boolean isValidImageType(String contentType) {
-        return contentType != null && (
-                contentType.equals("image/jpeg") ||
-                        contentType.equals("image/png") ||
-                        contentType.equals("image/gif") ||
-                        contentType.equals("image/webp")
-        );
-    }
-
     public List<Image> getTrashedImages() {
         return imageRepository.findAll().stream()
-            .filter(Image::getIsDeleted)
-            .sorted((a, b) -> b.getUpdatedAt().compareTo(a.getUpdatedAt()))
-            .toList();
+                .filter(Image::getIsDeleted)
+                .sorted((a, b) -> b.getUpdatedAt().compareTo(a.getUpdatedAt()))
+                .toList();
     }
 
-    public Image restoreFromTrash(Long id) {
+    public void moveToTrash(Long id) {
         Image image = getImageById(id);
+        image.setIsDeleted(true);
+        imageRepository.save(image);
+    }
+
+    // Fixed: Use internal method to bypass deletion check
+    public Image restoreFromTrash(Long id) {
+        Image image = getImageByIdInternal(id);
         if (!image.getIsDeleted()) {
             throw new IllegalStateException("Image is not in trash");
         }
@@ -195,8 +221,9 @@ public class ImageService {
         return imageRepository.save(image);
     }
 
+    // Fixed: Use internal method and renamed for consistency
     public void deletePermanently(Long id) {
-        Image image = getImageById(id);
+        Image image = getImageByIdInternal(id);
 
         // Delete the physical file
         try {

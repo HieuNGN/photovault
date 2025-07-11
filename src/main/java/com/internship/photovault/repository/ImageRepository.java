@@ -12,7 +12,8 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
-//@Repository // Marks this as a Spring repository bean
+// Early creation blank test
+//@Repository
 //public interface ImageRepository extends JpaRepository<Image, Long> {
 //    // Spring Data JPA will automatically implement all basic CRUD methods.
 //    // We can add custom query methods here later if needed.
@@ -23,9 +24,15 @@ import java.util.Optional;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
-    // Add proper generics to all methods
-    @Query("SELECT i FROM Image i WHERE i.isDeleted = false")
+    @Query("SELECT i FROM Image i WHERE i.isDeleted = false ORDER BY i.uploadDate DESC")
     Page<Image> findAllActive(Pageable pageable);
+
+    @Query("SELECT i FROM Image i WHERE i.isDeleted = false ORDER BY i.uploadDate DESC")
+    List<Image> findAllActive();
+
+// Add proper generics to all methods, update the find all to exclude deleted
+//    @Query("SELECT i FROM Image i WHERE i.isDeleted = false")
+//    Page<Image> findAllActive(Pageable pageable);
 
     @Query("SELECT i FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false")
     List<Image> findFavorites();
@@ -46,5 +53,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     @Query("SELECT COUNT(i) FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false")
     long countFavorites();
+
+    Optional<Object> findByStoredFilename(String filename);
 }
 
