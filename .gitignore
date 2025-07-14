@@ -1,0 +1,46 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+#Environment/Config Files
+# .env
+# src/main/resources/application.properties
+
+#Database Migration Scripts that contains sensitive data
+# src/main/resources/db/migration/V2__create_users_table.sql
+
+#Codebase Summary
+repomix-output-*.xml
+
+#sql migration files
+photovault_backup_20250711.sql
+
+### STS ###
+# .apt_generated
+# .classpath
+# .factorypath
+# .project
+# .settings
+# .springBeans
+# .sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
