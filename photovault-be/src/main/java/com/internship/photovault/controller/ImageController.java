@@ -1,9 +1,11 @@
 package com.internship.photovault.controller;
 
 import com.internship.photovault.entity.Image;
+import com.internship.photovault.entity.User;
 import com.internship.photovault.exception.ImageNotFoundException;
 import com.internship.photovault.exception.InvalidFileTypeException;
 import com.internship.photovault.service.ImageService;
+import com.internship.photovault.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -29,9 +31,11 @@ import java.util.Map;
 public class ImageController {
 
     private final ImageService imageService;
+    private final UserService userService;
 
-    public ImageController(ImageService imageService) {
+    public ImageController(ImageService imageService, UserService userService) {
         this.imageService = imageService;
+        this.userService = userService;
     }
 
     @PostMapping("/upload")
@@ -42,7 +46,10 @@ public class ImageController {
                         .body(Map.of("error", "File cannot be empty"));
             }
 
-            Image savedImage = imageService.saveImage(file);
+            User currentUser = userService.getCurrentUser();
+//            Image savedImage = imageService.saveImage(file, currentUser);
+
+            Image savedImage = imageService.saveImage(file, currentUser);
             return ResponseEntity.ok(Map.of(
                     "message", "Image uploaded successfully",
                     "image", savedImage
@@ -73,7 +80,7 @@ public class ImageController {
                 MultipartFile file = files[i];
                 try {
                     if (!file.isEmpty()) {
-                        Image savedImage = imageService.saveImage(file);
+                        Image savedImage = imageService.saveImage(file, userService.getCurrentUser());
                         successfulUploads.add(savedImage);
                         results.add(Map.of(
                                 "index", i,
@@ -120,23 +127,26 @@ public class ImageController {
 
     @GetMapping
     public ResponseEntity<Page<Image>> getAllImages(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "uploadDate") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDir) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", defaultValue = "uploadDate") String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir) {
+
+        User currentUser = userService.getCurrentUser();
 
         Pageable pageable = PageRequest.of(page, size,
                 sortDir.equalsIgnoreCase("desc") ?
                         Sort.by(sortBy).descending() : Sort.by(sortBy).ascending());
 
-        Page<Image> images = imageService.getAllImages(pageable);
-        return ResponseEntity.ok(images);
+        Page<Image> images = imageService.getAllImages(currentUser, pageable);
+            return ResponseEntity.ok(images);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getImageById(@PathVariable Long id) {
+    public ResponseEntity<?> getImageById(@PathVariable("id") Long id) {
         try {
-            Image image = imageService.getImageById(id);
+            User currentUser = userService.getCurrentUser();
+            Image image = imageService.getImageById(id, currentUser);
             return ResponseEntity.ok(image);
         } catch (ImageNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -144,9 +154,10 @@ public class ImageController {
     }
 
     @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> downloadImage(@PathVariable Long id) {
+    public ResponseEntity<Resource> downloadImage(@PathVariable("id") Long id) {
         try {
-            Image image = imageService.getImageById(id);
+            User currentUser = userService.getCurrentUser();
+            Image image = imageService.getImageById(id, currentUser);
             Resource resource = imageService.loadImageAsResource(image.getStoredFilename());
 
             return ResponseEntity.ok()
@@ -160,9 +171,10 @@ public class ImageController {
     }
 
     @PutMapping("/{id}/favorite")
-    public ResponseEntity<?> toggleFavorite(@PathVariable Long id) {
+    public ResponseEntity<?> toggleFavorite(@PathVariable("id") Long id) {
         try {
-            Image image = imageService.toggleFavorite(id);
+            User currentUser = userService.getCurrentUser();
+            Image image = imageService.toggleFavorite(id, currentUser);
             return ResponseEntity.ok(Map.of(
                     "message", "Favorite status updated",
                     "isFavorite", image.getIsFavorite()
@@ -174,26 +186,30 @@ public class ImageController {
 
     @GetMapping("/favorites")
     public ResponseEntity<List<Image>> getFavorites() {
-        List<Image> favorites = imageService.getFavorites();
+        User currentUser = userService.getCurrentUser();
+        List<Image> favorites = imageService.getFavorites(currentUser);
         return ResponseEntity.ok(favorites);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Image>> searchImages(@RequestParam String query) {
-        List<Image> results = imageService.searchImages(query);
+    public ResponseEntity<List<Image>> searchImages(@RequestParam("query") String query) {
+        List<Image> results = imageService.searchImages(query, userService.getCurrentUser());
         return ResponseEntity.ok(results);
     }
 
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getStats() {
-        Map<String, Object> stats = imageService.getImageStats();
+        User currentUser = userService.getCurrentUser();
+        Map<String, Object> stats = imageService.getImageStats(currentUser);
         return ResponseEntity.ok(stats);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteImage(@PathVariable Long id) {
+    public ResponseEntity<?> deleteImage(@PathVariable("id") Long id) {
         try {
-            imageService.moveToTrash(id);
+            User currentUser = userService.getCurrentUser();
+            imageService.moveToTrash(id, currentUser);
+//            imageService.moveToTrash(id);
             return ResponseEntity.ok(Map.of("message", "Item moved to trash"));
         } catch (ImageNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -201,9 +217,10 @@ public class ImageController {
     }
 
     @PutMapping("/{id}/archive")
-    public ResponseEntity<?> toggleArchive(@PathVariable Long id) {
+    public ResponseEntity<?> toggleArchive(@PathVariable("id") Long id) {
         try {
-            Image image = imageService.toggleArchive(id);
+            User currentUser = userService.getCurrentUser();
+            Image image = imageService.toggleArchive(id, currentUser);
             return ResponseEntity.ok(Map.of(
                     "message", "Archive status updated",
                     "isArchived", image.getIsArchived()
@@ -215,20 +232,23 @@ public class ImageController {
 
     @GetMapping("/archived")
     public ResponseEntity<List<Image>> getArchivedImages() {
-        List<Image> archivedImages = imageService.getArchivedImages();
+        User currentUser = userService.getCurrentUser();
+        List<Image> archivedImages = imageService.getArchivedImages(currentUser);
         return ResponseEntity.ok(archivedImages);
     }
 
 //    adding the backend endpoints for the trash and restore functions
     @GetMapping("/trash")
     public ResponseEntity<List<Image>> getTrashedImages() {
-        List<Image> trashedImages = imageService.getTrashedImages();
+        User currentUser = userService.getCurrentUser();
+        List<Image> trashedImages = imageService.getTrashedImages(currentUser);
         return ResponseEntity.ok(trashedImages);
     }
     @PutMapping("/{id}/restore")
-    public ResponseEntity<?> restoreImage(@PathVariable Long id) {
+    public ResponseEntity<?> restoreImage(@PathVariable("id") Long id) {
         try {
-            Image image = imageService.restoreFromTrash(id);
+            User currentUser = userService.getCurrentUser();
+            Image image = imageService.restoreFromTrash(id, currentUser);
             return ResponseEntity.ok(Map.of(
                     "message", "Item restored from trash",
                     "image", image
@@ -238,9 +258,9 @@ public class ImageController {
         }
     }
     @DeleteMapping("/{id}/permanent")
-    public ResponseEntity<?> deletePermanently(@PathVariable Long id) {
+    public ResponseEntity<?> deletePermanently(@PathVariable("id") Long id) {
         try {
-            imageService.deletePermanently(id);
+            imageService.deletePermanently(id, userService.getCurrentUser());
             return ResponseEntity.ok(Map.of("message", "Item permanently deleted"));
         } catch (ImageNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -248,9 +268,10 @@ public class ImageController {
     }
 
     @GetMapping("/{id}/thumbnail")
-    public ResponseEntity<Resource> getThumbnail(@PathVariable Long id) {
+    public ResponseEntity<Resource> getThumbnail(@PathVariable("id") Long id) {
         try {
             // Use internal method to bypass deletion check
+            User currentUser = userService.getCurrentUser();
             Image image = imageService.getImageByIdInternal(id);
             Resource resource = imageService.loadImageAsResource(image.getStoredFilename());
 

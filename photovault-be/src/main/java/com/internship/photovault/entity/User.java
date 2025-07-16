@@ -26,6 +26,12 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+/*
+    // remove the column for security reasons
+    @Column(name = "password", nullable = false)
+    private String password;
+*/
+
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
@@ -39,6 +45,8 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+
 
     public enum Role {
         USER, ADMIN

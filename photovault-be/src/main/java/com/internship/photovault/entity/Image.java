@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Setter
 @Getter
 @Entity
@@ -86,12 +85,30 @@ public class Image {
     )
     private Set<Tag> tags = new HashSet<>();
 
-//    @Column(name = "filename", unique = true, nullable = false)
-//    private String filename;
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<ImageStates> imageStates = new HashSet<>();
+
+    // Add helper method to get user-specific state
+    public ImageStates getStateForUser(User user) {
+        return imageStates.stream()
+                .filter(state -> state.getUser().equals(user))
+                .findFirst()
+                .orElse(null);
+    }
+
+
+/*    @Column(name = "filename", unique = true, nullable = false)
+    private String filename;*/
 
     // Constructors
     public Image() {
         this.uploadDate = LocalDateTime.now();
     }
+
+/*
+    public String getStoredFilename() {
+        return storedFilename;
+    }
+*/
 
 }

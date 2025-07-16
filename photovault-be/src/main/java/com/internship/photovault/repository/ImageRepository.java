@@ -28,53 +28,56 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     Page<Image> findByUserAndIsDeletedFalse(User user, Boolean isDeleted, Pageable pageable);
     Page<Image> findByUserAndIsFavoriteTrueAndIsDeletedFalse(User user, Pageable pageable);
 
-    @Query("SELECT i FROM Image i WHERE i.isDeleted = false AND i.isArchived = false ORDER BY i.uploadDate DESC")
-    Page<Image> findAllActiveImages(Pageable pageable);
+    //  optional lookup methods
+    Optional<Image> findByFilenameAndIsDeletedFalse(String filename);
+    Optional<Image> findByStoredFilename(String filename);
+    Optional<Image> findByChecksumSha256AndUser(String checksumSha256, User user);
+
+    @Query("SELECT i FROM Image i WHERE i.user = :user AND i.isDeleted = false AND i.isArchived = false ORDER BY i.uploadDate DESC")
+    Page<Image> findAllActiveImages(@Param("user") User user, @Param("isDeleted") Boolean isDeleted, Pageable pageable);
 
     @Query("SELECT i FROM Image i WHERE i.isDeleted = false AND i.isArchived = false ORDER BY i.uploadDate DESC")
     List<Image> findAllActiveImages();
 
-// Add proper generics to all methods, update the find all to exclude deleted
-//    @Query("SELECT i FROM Image i WHERE i.isDeleted = false")
-//    Page<Image> findAllActive(Pageable pageable);
-//  not deleted images, including archived and favorites
+/* Add proper generics to all methods, update the find all to exclude deleted
+    @Query("SELECT i FROM Image i WHERE i.isDeleted = false")
+    Page<Image> findAllActive(Pageable pageable);
+  not deleted images, including archived and favorites*/
+
     @Query("SELECT i FROM Image i WHERE i.isDeleted = false ORDER BY i.uploadDate DESC")
-    Page<Image> findAllNotDeleted(Pageable pageable);
+    Page<Image> findAllDeleted(Pageable pageable);
 
     @Query("SELECT i FROM Image i WHERE i.isDeleted = true ORDER BY i.uploadDate DESC")
-    List<Image> findAllNotDeleted();
+    List<Image> findAllDeleted();
 
 //  other categories
-    @Query("SELECT i FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false ORDER BY i.uploadDate DESC")
-    List<Image> findFavoriteImages();
+    @Query("SELECT i FROM Image i WHERE i.user = :user AND i.isFavorite = true AND i.isDeleted = false ORDER BY i.uploadDate DESC")
+    List<Image> findFavoriteImages(@Param("user") User user);
 
-    @Query("SELECT i FROM Image i WHERE i.isArchived = true AND i.isDeleted = false ORDER BY i.uploadDate DESC")
-    List<Image> findArchivedImages();
+    @Query("SELECT i FROM Image i WHERE i.user = :user AND i.isArchived = true AND i.isDeleted = false ORDER BY i.uploadDate DESC")
+    List<Image> findArchivedImages(@Param("user") User user);
 
-    @Query("SELECT i FROM Image i WHERE i.isDeleted = true ORDER BY i.uploadDate DESC")
-    List<Image> findTrashImages();
-
-//  optional lookup methods
-    Optional<Image> findByFilenameAndIsDeletedFalse(String filename);
-    Optional<Image> findByStoredFilename(String filename);
+    @Query("SELECT i FROM Image i WHERE i.user = :user AND i.isDeleted = true ORDER BY i.uploadDate DESC")
+    List<Image> findTrashImages(@Param("user") User user);
 
 //  search methods
-    @Query("SELECT i FROM Image i WHERE i.originalFilename ILIKE %:searchTerm% AND i.isDeleted = false AND i.isArchived = false ORDER BY i.uploadDate DESC")
-    List<Image> searchByOriginalFilename(@Param("searchTerm") String searchTerm);
+    @Query("SELECT i FROM Image i WHERE i.user = :user AND i.originalFilename ILIKE %:searchTerm% AND i.isDeleted = false AND i.isArchived = false ORDER BY i.uploadDate DESC")
+    List<Image> searchByOriginalFilename(@Param("searchTerm") String searchTerm, @Param("user") User user);
 
 //  count methods
-    @Query("SELECT COUNT(i) FROM Image i WHERE i.isDeleted = false AND i.isArchived = false")
-    long countActiveImages();
+    @Query("SELECT COUNT(i) FROM Image i WHERE i.user = :user AND i.isDeleted = false AND i.isArchived = false")
+    long countActiveImages(@Param("user") User user);
 
-    @Query("SELECT COUNT(i) FROM Image i WHERE i.isFavorite = true AND i.isDeleted = false")
-    long countFavoriteImages();
+    @Query("SELECT COUNT(i) FROM Image i WHERE i.user = :user AND i.isFavorite = true AND i.isDeleted = false")
+    long countFavoriteImages(@Param("user") User user);
 
-    @Query("SELECT COUNT(i) FROM Image i WHERE i.isArchived = true AND i.isDeleted = false")
-    long countArchivedImages();
+    @Query("SELECT COUNT(i) FROM Image i WHERE i.user = :user AND i.isArchived = true AND i.isDeleted = false")
+    long countArchivedImages(@Param("user") User user);
 
-    @Query("SELECT COUNT(i) FROM Image i WHERE i.isDeleted = true")
-    long countTrashedImages();
+    @Query("SELECT COUNT(i) FROM Image i WHERE i.user = :user AND i.isDeleted = true")
+    long countTrashedImages(@Param("user") User user);
 
 
+//    User user(User user);
 }
 
