@@ -1,0 +1,19 @@
+<div class="upload-area"
+     (dragover)="onDragOver($event)"
+     (dragleave)="onDragLeave($event)"
+     (drop)="onDrop($event)">
+  <input type="file"
+         multiple
+         accept="image/*"
+         (change)="onFileSelected($event)"
+         #fileInput
+         style="display: none;">
+
+  <div class="upload-content" (click)="fileInput.click()">
+    <mat-icon>cloud_upload</mat-icon>
+    <p>Drag and drop images here or click to select</p>
+    <button mat-raised-button color="primary">
+      Choose Files
+    </button>
+  </div>
+</div>

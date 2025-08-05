@@ -1,0 +1,28 @@
+<mat-card class="image-card">
+  <app-image-thumbnail
+    [imageId]="image.id"
+    [alt]="image.originalFilename"
+    [width]="200"
+    [height]="200">
+  </app-image-thumbnail>
+
+  <mat-card-actions>
+    <button mat-icon-button
+            (click)="onToggleFavorite()"
+            [color]="image.isFavorite ? 'warn' : 'primary'">
+      <mat-icon>{{image.isFavorite ? 'favorite' : 'favorite_border'}}</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="onDownload()">
+      <mat-icon>download</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="onToggleArchive()">
+      <mat-icon>archive</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

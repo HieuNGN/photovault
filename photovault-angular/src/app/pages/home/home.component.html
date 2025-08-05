@@ -1,0 +1,49 @@
+<div class="container">
+  <h1>PhotoVault - Home</h1>
+
+  <!-- Backend Connection Status -->
+  <div *ngIf="!backendConnected && !loading" class="connection-error">
+    <mat-icon>error_outline</mat-icon>
+    <p>Backend server is not accessible</p>
+    <button mat-raised-button color="primary" (click)="retryConnection()">
+      Retry Connection
+    </button>
+  </div>
+
+  <!-- Upload Area -->
+  <div *ngIf="backendConnected">
+    <app-image-upload (filesSelected)="onFilesSelected($event)"></app-image-upload>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <mat-progress-spinner></mat-progress-spinner>
+    <p>{{ backendConnected ? 'Loading images...' : 'Connecting to server...' }}</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error">
+    <mat-icon>error</mat-icon>
+    <p>{{error}}</p>
+    <button mat-raised-button color="primary" (click)="loadImages()">
+      Retry
+    </button>
+  </div>
+
+  <!-- Images Grid -->
+  <div *ngIf="!loading && !error && backendConnected" class="image-grid">
+    <div *ngIf="images.length === 0" class="no-images">
+      <mat-icon>photo_library</mat-icon>
+      <p>No images found. Upload some images to get started!</p>
+    </div>
+
+    <app-image-card
+      *ngFor="let image of images"
+      [image]="image"
+      (toggleFavorite)="onToggleFavorite($event)"
+      (toggleArchive)="onToggleArchive($event)"
+      (downloadImage)="onDownloadImage($event)"
+      (deleteImage)="onDeleteImage($event)">
+    </app-image-card>
+  </div>
+</div>

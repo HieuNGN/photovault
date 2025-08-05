@@ -1,0 +1,202 @@
+// 1. Fix Component Class Names
+
+// src/app/components/image-thumbnail/image-thumbnail.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-image-thumbnail',
+  templateUrl: './image-thumbnail.component.html', // ✅ Correct
+  styleUrls: ['./image-thumbnail.component.scss']  // ✅ Correct (note: styleUrls, not styleUrl)
+})
+export class ImageThumbnailComponent { // ✅ Correct class name
+  // Component logic
+}
+
+// src/app/components/image-upload/image-upload.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-image-upload',
+  templateUrl: './image-upload.component.html',
+  styleUrls: ['./image-upload.component.scss']
+})
+export class ImageUploadComponent { // ✅ Fixed
+  // Component logic
+}
+
+// src/app/pages/archive/archive.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-archive',
+  templateUrl: './archive.component.html',
+  styleUrls: ['./archive.component.scss']
+})
+export class ArchiveComponent { // ✅ Fixed
+  // Component logic
+}
+
+// src/app/pages/favorites/favorites.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-favorites',
+  templateUrl: './favorites.component.html',
+  styleUrls: ['./favorites.component.scss']
+})
+export class FavoritesComponent { // ✅ Fixed
+  // Component logic
+}
+
+// src/app/pages/trash/trash.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-trash',
+  templateUrl: './trash.component.html',
+  styleUrls: ['./trash.component.scss']
+})
+export class TrashComponent { // ✅ Fixed
+  // Component logic
+}
+
+// 2. Fix Test Files
+
+// src/app/components/image-thumbnail/image-thumbnail.spec.ts
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ImageThumbnailComponent } from './image-thumbnail.component'; // ✅ Fixed import
+
+describe('ImageThumbnailComponent', () => { // ✅ Fixed name
+  let component: ImageThumbnailComponent;
+  let fixture: ComponentFixture<ImageThumbnailComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ImageThumbnailComponent] // ✅ Fixed
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(ImageThumbnailComponent); // ✅ Fixed
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+
+// 3. Fix App Component
+
+// src/app/app.component.ts
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'] // ✅ Fixed
+})
+export class AppComponent { // ✅ Should only have one class
+  protected readonly title = signal('photovault-angular');
+}
+
+// Remove the duplicate class:
+// export class AppComponentComponent { ... } // ❌ Remove this
+
+// 4. Fix Service Names
+
+// src/app/services/auth.service.ts
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService { // ✅ Correct service name
+  // Service logic
+}
+
+// 5. Module Structure Fixes
+
+// src/app/app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
+// Material imports
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+// Import your fixed components
+import { ImageCardComponent } from './components/image-card/image-card.component';
+import { ImageThumbnailComponent } from './components/image-thumbnail/image-thumbnail.component';
+import { ImageUploadComponent } from './components/image-upload/image-upload.component';
+import { HomeComponent } from './pages/home/home.component';
+import { ArchiveComponent } from './pages/archive/archive.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
+import { TrashComponent } from './pages/trash/trash.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,           // ✅ Fixed
+    ImageCardComponent,     // ✅ Fixed
+    ImageThumbnailComponent,// ✅ Fixed
+    ImageUploadComponent,   // ✅ Fixed
+    HomeComponent,
+    ArchiveComponent,       // ✅ Fixed
+    FavoritesComponent,     // ✅ Fixed
+    TrashComponent          // ✅ Fixed
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule,
+    // Material modules
+    MatToolbarModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatGridListModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+// 6. Create Missing Files
+// You need to create these SCSS files with basic content:
+
+// src/app/components/image-thumbnail/image-thumbnail.component.scss
+/* Image thumbnail component styles */
+
+// src/app/components/image-upload/image-upload.component.scss
+/* Image upload component styles */
+
+// src/app/pages/archive/archive.component.scss
+/* Archive page styles */
+
+// src/app/pages/favorites/favorites.component.scss
+/* Favorites page styles */
+
+// src/app/pages/trash/trash.component.scss
+/* Trash page styles */

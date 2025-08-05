@@ -30,8 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getUsername(),
                 user.getPasswordHash(),
                 user.getIsActive(),
-                false, // account not expired
-                false, // credentials not expired
+                true, // account isn't expired
+                true, // credentials not expired
                 true, // account not locked
                 getAuthorities(user)
         );
