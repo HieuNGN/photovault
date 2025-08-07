@@ -1,5 +1,15 @@
-<div class="container">
-  <h1>PhotoVault - Home</h1>
+<!-- Show login form if not authenticated -->
+<app-login *ngIf="!isAuthenticated"></app-login>
+
+<!-- Show main app if authenticated -->
+<div *ngIf="isAuthenticated" class="container">
+  <div class="header">
+    <h1>PhotoVault - Home</h1>
+    <button mat-raised-button color="warn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </div>
 
   <!-- Backend Connection Status -->
   <div *ngIf="!backendConnected && !loading" class="connection-error">
@@ -17,7 +27,7 @@
 
   <!-- Loading State -->
   <div *ngIf="loading" class="loading">
-    <mat-progress-spinner></mat-progress-spinner>
+    <mat-spinner></mat-spinner>
     <p>{{ backendConnected ? 'Loading images...' : 'Connecting to server...' }}</p>
   </div>
 

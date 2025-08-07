@@ -1,5 +1,20 @@
-<img [src]="thumbnailUrl"
-     [alt]="alt"
-     [style.width.px]="width"
-     [style.height.px]="height"
-     style="object-fit: cover; border-radius: 4px;">
+<div class="thumbnail-container">
+  <img
+    *ngIf="!imageError"
+    [src]="thumbnailUrl"
+    [alt]="alt"
+    [style.width.px]="width"
+    [style.height.px]="height"
+    (load)="onImageLoad()"
+    (error)="onImageError()"
+    class="thumbnail-image">
+
+  <div
+    *ngIf="imageError"
+    class="thumbnail-error"
+    [style.width.px]="width"
+    [style.height.px]="height">
+    <mat-icon>broken_image</mat-icon>
+    <span>Failed to load</span>
+  </div>
+</div>

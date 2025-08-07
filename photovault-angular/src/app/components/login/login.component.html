@@ -1,0 +1,39 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>PhotoVault Login</mat-card-title>
+      <mat-card-subtitle>Enter your credentials to access PhotoVault</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="username" name="username" required autocomplete="username">
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput
+                 [type]="hidePassword ? 'password' : 'text'"
+                 [(ngModel)]="password"
+                 name="password"
+                 required
+                 autocomplete="current-password">
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary"
+              [disabled]="!loginForm.form.valid || logging"
+              (click)="onLogin()">
+        {{logging ? 'Logging in...' : 'Login'}}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

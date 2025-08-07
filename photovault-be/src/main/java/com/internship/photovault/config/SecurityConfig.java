@@ -27,12 +27,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/users/register", "/users/login", "/users/init-admin").permitAll()
                         .requestMatchers("/h2-console/**").permitAll() // If using H2 for testing
+                        // Add health endpoint access
+                        .requestMatchers("/actuator/health", "/health").permitAll()
+                        // For Angular development - allow CORS preflight requests
+                        .requestMatchers("/api/**").permitAll() // If you have API endpoints
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
 //                        .loginPage("/login") // only for custom made login page
-                        .defaultSuccessUrl("/images", true)
-                        .permitAll()
+                                .defaultSuccessUrl("/images", true)
+                                .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
@@ -41,7 +45,6 @@ public class SecurityConfig {
                 .userDetailsService(customUserDetailsService) // Use custom service including users, names, passwords, roles
                 .csrf(csrf -> csrf.disable()) // Disable for API testing
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()).disable()); // Disable frame options for H2 console access
-//        .headers(headers -> headers.frameOptions.disable()); // deprecated in Spring Security 6.1
 
         return http.build();
     }
@@ -56,7 +59,6 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 }
-
 // blank test
 /*import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
